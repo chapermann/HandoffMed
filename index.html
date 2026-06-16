@@ -180,27 +180,26 @@ function criarLeitos(){
 
         div.className = "leito";
 
-        div.innerHTML = `
-            <h3>Vermelha ${i}</h3>
+div.innerHTML = `
+    <h3>Vermelha ${i}</h3>
 
-            <textarea
-                id="evolucao_${i}"
-                placeholder="Cole aqui a evolução médica">
-            </textarea>
+    <textarea
+        id="evolucao_${i}"
+        placeholder="Cole aqui a evolução médica">
+    </textarea>
 
-```
-        <br><br>
+    <br><br>
 
-        <button onclick="gerarResumo(${i})">
-            Gerar Resumo
-        </button>
+    <button onclick="gerarResumo(${i})">
+        Gerar Resumo
+    </button>
 
-        <div
-            class="resumo"
-            id="resumo_${i}">
-        </div>
-    `;
-
+    <div
+        class="resumo"
+        id="resumo_${i}">
+    </div>
+`;
+        
     container.appendChild(div);
 }
 ```
