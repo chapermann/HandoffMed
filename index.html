@@ -108,50 +108,12 @@ let NVIDIA_API_KEY = "";
 
 async function entrar(){
 
-    const chave =
-        document.getElementById("apiKey").value.trim();
+    document.getElementById("login").style.display="none";
+    document.getElementById("app").style.display="block";
 
-    if(!chave){
-        alert("Informe a API Key");
-        return;
-    }
+    criarLeitos();
 
-    NVIDIA_API_KEY = chave;
-
-    document.getElementById("status").innerText =
-        "Validando chave...";
-
-    try{
-
-        const resposta = await fetch(
-            "https://integrate.api.nvidia.com/v1/chat/completions",
-            {
-                method:"POST",
-                headers:{
-                    "Authorization":"Bearer " + NVIDIA_API_KEY,
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    model:"meta/llama-3.3-70b-instruct",
-                    messages:[
-                        {
-                            role:"user",
-                            content:"Responda apenas OK"
-                        }
-                    ],
-                    temperature:0
-                })
-            }
-        );
-
-        if(!resposta.ok){
-            throw new Error("Falha na autenticação");
-        }
-
-        document.getElementById("login").style.display="none";
-        document.getElementById("app").style.display="block";
-
-        criarLeitos();
+}
 
     }
     catch(erro){
@@ -247,13 +209,12 @@ destino.innerText =
 
 try{
 
-    const resposta = await fetch(
-        "https://integrate.api.nvidia.com/v1/chat/completions",
+const resposta = await fetch(
+    "https://handoffmed.chapermann.workers.dev/",
         {
             method:"POST",
             headers:{
-                "Authorization":"Bearer " + NVIDIA_API_KEY,
-                "Content-Type":"application/json"
+            "Content-Type":"application/json"
             },
             body:JSON.stringify({
                 model:"meta/llama-3.3-70b-instruct",
