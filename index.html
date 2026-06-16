@@ -74,40 +74,34 @@ textarea{
 <body>
 
 <div id="login" class="login-screen">
-    <div class="card">
-        <h2>HandoffMed</h2>
+<div class="card">
 
-```
-    <p>Informe sua NVIDIA API Key</p>
+<p>Informe sua NVIDIA API Key</p>
 
-    <input
-        type="password"
-        id="apiKey"
-        placeholder="nvapi-xxxxxxxxxxxxxxxx"
-    >
+<input
+    type="password"
+    id="apiKey"
+    placeholder="nvapi-xxxxxxxxxxxxxxxx"
+>
 
-    <button onclick="entrar()">
-        Entrar
-    </button>
+<button onclick="entrar()">
+    Entrar
+</button>
 
-    <p id="status"></p>
-</div>
-```
+<p id="status"></p>
 
 </div>
 
 <div id="app">
 
-```
 <h1>HandoffMed</h1>
 
 <h2>Sala Vermelha</h2>
 
 <div id="leitos"></div>
-```
 
 </div>
-
+    
 <script>
 
 let NVIDIA_API_KEY = "";
@@ -216,23 +210,22 @@ const texto =
     )
     .value;
 
+```javascript
 const prompt = `
-```
-
 Você é um assistente de passagem de plantão médico.
 
 Regras:
 
-* Remova identificadores.
-* Linguagem formal.
-* Não invente dados.
-* Organize:
+- Remova identificadores.
+- Linguagem formal.
+- Não invente dados.
+- Organize:
 
 Motivo da internação
 Dias internado
 Ventilação ou Respiração
 Hemodinâmica atual
-Pontos de atenção: analise os exames e as alterações e chame atenção desses pontos.
+Pontos de atenção
 Pendências atuais
 Urgências ou ações imediatas
 Limitação terapêutica - se houver
