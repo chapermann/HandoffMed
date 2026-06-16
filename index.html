@@ -73,22 +73,25 @@ textarea{
 
 <body>
 
-<div id="login" class="login-screen">
 <div class="card">
 
-<p>Informe sua NVIDIA API Key</p>
+    <h2>HandoffMed</h2>
 
-<input
-    type="password"
-    id="apiKey"
-    placeholder="nvapi-xxxxxxxxxxxxxxxx"
->
+    <p>Informe sua NVIDIA API Key</p>
 
-<button onclick="entrar()">
-    Entrar
-</button>
+        <input
+            type="password"
+            id="apiKey"
+            placeholder="nvapi-xxxxxxxxxxxxxxxx"
+        >
 
-<p id="status"></p>
+        <button onclick="entrar()">
+            Entrar
+        </button>
+
+        <p id="status"></p>
+
+    </div>
 
 </div>
 
@@ -113,15 +116,6 @@ async function entrar(){
 
     criarLeitos();
 
-}
-
-    }
-    catch(erro){
-
-        document.getElementById("status").innerText =
-            "API Key inválida ou erro de conexão.";
-
-    }
 }
 
 function criarLeitos(){
@@ -229,22 +223,17 @@ const resposta = await fetch(
         }
     );
 
-    const dados =
-        await resposta.json();
+const dados =
+    await resposta.json();
 
-    destino.innerText =
-        dados.choices[0].message.content;
+destino.innerText =
+    JSON.stringify(dados, null, 2);
 
-
-catch(erro)
 }
-{
+catch(erro){
 
     destino.innerText =
         "Erro ao gerar resumo.";
-
-}
-
 
 }
 
