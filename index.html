@@ -109,63 +109,16 @@ textarea{
 
 let NVIDIA_API_KEY = "";
 
-async function entrar(){
-
-    document.getElementById("login").style.display="none";
-    document.getElementById("app").style.display="block";
-
-    criarLeitos();
-
-}
-
-function criarLeitos(){
-
-    const container =
-        document.getElementById("leitos");
-
-    for(let i=1;i<=11;i++){
-
-        const div =
-            document.createElement("div");
-
-        div.className = "leito";
-
-div.innerHTML = `
-    <h3>Vermelha ${i}</h3>
-
-    <textarea
-        id="evolucao_${i}"
-        placeholder="Cole aqui a evolução médica">
-    </textarea>
-
-    <br><br>
-
-    <button onclick="gerarResumo(${i})">
-        Gerar Resumo
-    </button>
-
-    <div
-        class="resumo"
-        id="resumo_${i}">
-    </div>
-`;
-        
-    container.appendChild(div);
-
-    }
-}
-
 async function gerarResumo(numero){
 
-const texto =
-    document
-    .getElementById(
-        "evolucao_" + numero
-    )
-    .value;
-                                }
-    
-const prompt = `
+    const texto =
+        document
+        .getElementById(
+            "evolucao_" + numero
+        )
+        .value;
+
+    const prompt = `
 
 Você é um assistente de passagem de plantão médico.
 
@@ -193,47 +146,49 @@ Texto:
 ${texto}
 `;
 
-const destino =
-    document.getElementById(
-        "resumo_" + numero
-    );
-
-destino.innerText =
-    "Processando...";
-
-try{
-
-const resposta = await fetch(
-    "https://handoffmed.chapermann.workers.dev/",
-        {
-            method:"POST",
-            headers:{
-            "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                model:"meta/llama-3.3-70b-instruct",
-                messages:[
-                    {
-                        role:"user",
-                        content:prompt
-                    }
-                ],
-                temperature:0.2
-            })
-        }
-    );
-
-const dados =
-    await resposta.json();
-
-destino.innerText =
-    JSON.stringify(dados, null, 2);
-
-}
-catch(erro){
+    const destino =
+        document.getElementById(
+            "resumo_" + numero
+        );
 
     destino.innerText =
-        "Erro ao gerar resumo.";
+        "Processando...";
+
+    try{
+
+        const resposta = await fetch(
+            "https://handoffmed.chapermann.workers.dev/",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    model:"meta/llama-3.3-70b-instruct",
+                    messages:[
+                        {
+                            role:"user",
+                            content:prompt
+                        }
+                    ],
+                    temperature:0.2
+                })
+            }
+        );
+
+        const dados =
+            await resposta.json();
+
+        destino.innerText =
+            JSON.stringify(dados, null, 2);
+
+    }
+    catch(erro){
+
+        destino.innerText =
+            "Erro ao gerar resumo.";
+
+    }
 
 }
 
