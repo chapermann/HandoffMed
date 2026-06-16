@@ -1,12 +1,301 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HandoffMed</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f7fa;
+    margin:0;
+    padding:0;
+}
+
+.login-screen{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    width:400px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    margin-bottom:20px;
+}
+
+button{
+    padding:10px 16px;
+    cursor:pointer;
+}
+
+#app{
+    display:none;
+    padding:20px;
+}
+
+.leito{
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+textarea{
+    width:100%;
+    min-height:120px;
+    margin-top:10px;
+}
+
+.resumo{
+    margin-top:10px;
+    background:#eef7ff;
+    padding:10px;
+    border-radius:6px;
+    white-space:pre-wrap;
+}
+</style>
+
 </head>
+
 <body>
-<h1>HandoffMed MVP</h1>
-<p>Arquivo inicial com integração NVIDIA NIM.</p>
+
+<div id="login" class="login-screen">
+    <div class="card">
+        <h2>HandoffMed</h2>
+
+```
+    <p>Informe sua NVIDIA API Key</p>
+
+    <input
+        type="password"
+        id="apiKey"
+        placeholder="nvapi-xxxxxxxxxxxxxxxx"
+    >
+
+    <button onclick="entrar()">
+        Entrar
+    </button>
+
+    <p id="status"></p>
+</div>
+```
+
+</div>
+
+<div id="app">
+
+```
+<h1>HandoffMed</h1>
+
+<h2>Sala Vermelha</h2>
+
+<div id="leitos"></div>
+```
+
+</div>
+
+<script>
+
+let NVIDIA_API_KEY = "";
+
+async function entrar(){
+
+    const chave =
+        document.getElementById("apiKey").value.trim();
+
+    if(!chave){
+        alert("Informe a API Key");
+        return;
+    }
+
+    NVIDIA_API_KEY = chave;
+
+    document.getElementById("status").innerText =
+        "Validando chave...";
+
+    try{
+
+        const resposta = await fetch(
+            "https://integrate.api.nvidia.com/v1/chat/completions",
+            {
+                method:"POST",
+                headers:{
+                    "Authorization":"Bearer " + NVIDIA_API_KEY,
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    model:"meta/llama-3.3-70b-instruct",
+                    messages:[
+                        {
+                            role:"user",
+                            content:"Responda apenas OK"
+                        }
+                    ],
+                    temperature:0
+                })
+            }
+        );
+
+        if(!resposta.ok){
+            throw new Error("Falha na autenticação");
+        }
+
+        document.getElementById("login").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        criarLeitos();
+
+    }
+    catch(erro){
+
+        document.getElementById("status").innerText =
+            "API Key inválida ou erro de conexão.";
+
+    }
+}
+
+function criarLeitos(){
+
+    const container =
+        document.getElementById("leitos");
+
+    for(let i=1;i<=11;i++){
+
+        const div =
+            document.createElement("div");
+
+        div.className = "leito";
+
+        div.innerHTML = `
+            <h3>Vermelha ${i}</h3>
+
+            <textarea
+                id="evolucao_${i}"
+                placeholder="Cole aqui a evolução médica">
+            </textarea>
+
+```
+        <br><br>
+
+        <button onclick="gerarResumo(${i})">
+            Gerar Resumo
+        </button>
+
+        <div
+            class="resumo"
+            id="resumo_${i}">
+        </div>
+    `;
+
+    container.appendChild(div);
+}
+```
+
+}
+
+async function gerarResumo(numero){
+
+```
+const texto =
+    document
+    .getElementById(
+        "evolucao_" + numero
+    )
+    .value;
+
+const prompt = `
+```
+
+Você é um assistente de passagem de plantão médico.
+
+Regras:
+
+* Remova identificadores.
+* Linguagem formal.
+* Não invente dados.
+* Organize:
+
+Motivo da internação
+Dias internado
+Ventilação ou Respiração
+Hemodinâmica atual
+Pontos de atenção: analise os exames e as alterações e chame atenção desses pontos.
+Pendências atuais
+Urgências ou ações imediatas
+Limitação terapêutica - se houver
+Condutas definidas pela Rotina Médica
+
+Máximo de 100 palavras.
+
+Texto:
+
+${texto}
+`;
+
+```
+const destino =
+    document.getElementById(
+        "resumo_" + numero
+    );
+
+destino.innerText =
+    "Processando...";
+
+try{
+
+    const resposta = await fetch(
+        "https://integrate.api.nvidia.com/v1/chat/completions",
+        {
+            method:"POST",
+            headers:{
+                "Authorization":"Bearer " + NVIDIA_API_KEY,
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                model:"meta/llama-3.3-70b-instruct",
+                messages:[
+                    {
+                        role:"user",
+                        content:prompt
+                    }
+                ],
+                temperature:0.2
+            })
+        }
+    );
+
+    const dados =
+        await resposta.json();
+
+    destino.innerText =
+        dados.choices[0].message.content;
+
+}
+catch(erro){
+
+    destino.innerText =
+        "Erro ao gerar resumo.";
+
+}
+```
+
+}
+
+</script>
+
 </body>
 </html>
