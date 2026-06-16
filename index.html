@@ -196,13 +196,12 @@ div.innerHTML = `
         
     container.appendChild(div);
 }
-```
+
 
 }
 
 async function gerarResumo(numero){
 
-```
 const texto =
     document
     .getElementById(
@@ -210,16 +209,16 @@ const texto =
     )
     .value;
 
-```javascript
 const prompt = `
+
 Você é um assistente de passagem de plantão médico.
 
 Regras:
 
-- Remova identificadores.
-- Linguagem formal.
-- Não invente dados.
-- Organize:
+Remova identificadores.
+Linguagem formal.
+Não invente dados.
+Organize:
 
 Motivo da internação
 Dias internado
@@ -238,7 +237,6 @@ Texto:
 ${texto}
 `;
 
-```
 const destino =
     document.getElementById(
         "resumo_" + numero
@@ -247,6 +245,7 @@ const destino =
 destino.innerText =
     "Processando...";
 
+}
 try{
 
     const resposta = await fetch(
@@ -283,7 +282,7 @@ catch(erro){
         "Erro ao gerar resumo.";
 
 }
-```
+
 
 }
 
