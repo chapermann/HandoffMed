@@ -73,17 +73,13 @@ textarea{
 
 <body>
 
-<div class="card">
+<div id="login" class="login-screen">
 
-    <h2>HandoffMed</h2>
+    <div class="card">
 
-    <p>Informe sua NVIDIA API Key</p>
+        <h2>HandoffMed</h2>
 
-        <input
-            type="password"
-            id="apiKey"
-            placeholder="nvapi-xxxxxxxxxxxxxxxx"
-        >
+        <p>Clique para iniciar</p>
 
         <button onclick="entrar()">
             Entrar
@@ -107,8 +103,54 @@ textarea{
     
 <script>
 
-let NVIDIA_API_KEY = "";
+async function entrar(){
 
+    document.getElementById("app").style.display="block";
+
+    criarLeitos();
+
+}
+
+function criarLeitos(){
+
+    const container =
+        document.getElementById("leitos");
+
+    container.innerHTML = "";
+
+    for(let i=1;i<=11;i++){
+
+        const div =
+            document.createElement("div");
+
+        div.className = "leito";
+
+        div.innerHTML = `
+            <h3>Leito Vermelha ${i}</h3>
+
+            <textarea
+                id="evolucao_${i}"
+                placeholder="Cole aqui a evolução médica">
+            </textarea>
+
+            <br><br>
+
+            <button onclick="gerarResumo(${i})">
+                Gerar Resumo
+            </button>
+
+            <div
+                class="resumo"
+                id="resumo_${i}">
+            </div>
+        `;
+
+        container.appendChild(div);
+
+    }
+
+}
+    
 async function gerarResumo(numero){
 
     const texto =
