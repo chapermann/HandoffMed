@@ -18,19 +18,19 @@
         body {
             background-color: #ffffff;
             color: #333333;
-            line-height: 1.6;
-            padding: 20px;
+            line-height: 1.5;
+            padding: 30px;
         }
 
         header {
             border-bottom: 2px solid #0056b3;
             padding-bottom: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         h1 {
             color: #0056b3;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
         }
 
@@ -40,109 +40,127 @@
             margin-top: 5px;
         }
 
-        .config-section {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 15px;
+        .section-title {
+            background-color: #f1f3f5;
+            color: #495057;
+            padding: 10px 15px;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-left: 5px solid #0056b3;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Grid de Leitos 3D */
+        .leitos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
             margin-bottom: 25px;
         }
 
-        .config-title {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .input-group {
-            display: table;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .input-cell {
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .input-cell label {
-            font-weight: 600;
-            font-size: 13px;
-            padding-right: 10px;
-            white-space: nowrap;
-        }
-
-        .input-cell input, .input-cell select {
-            width: 100%;
-            padding: 8px;
+        .leito-card {
+            background: #ffffff;
             border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-
-        .grid-container {
-            display: block;
-        }
-
-        .section-title {
-            background-color: #e9ecef;
-            color: #495057;
-            padding: 8px 12px;
-            font-weight: 700;
-            font-size: 15px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            border-left: 4px solid #0056b3;
-        }
-
-        .patient-card {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
+            border-bottom: 4px solid #ced4da;
+            border-radius: 6px;
             padding: 15px;
-            margin-bottom: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
         }
 
-        .patient-header {
+        .leito-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .leito-card.active {
+            border-color: #0056b3;
+            border-bottom-width: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .leito-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: #212529;
+            margin-bottom: 10px;
+        }
+
+        /* Lâmpadas de Status */
+        .lampada {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .lampada.vermelha {
+            background-color: #dc3545;
+            box-shadow: 0 0 8px #dc3545;
+        }
+
+        .lampada.verde {
+            background-color: #28a745;
+            box-shadow: 0 0 8px #28a745;
+        }
+
+        /* Área de Trabalho Central */
+        .work-area {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .work-header {
             font-weight: 700;
             color: #0056b3;
-            font-size: 14px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 5px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            font-size: 12px;
-            color: #495057;
-            margin-bottom: 5px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         textarea {
             width: 100%;
-            height: 100px;
-            padding: 8px;
+            padding: 12px;
             border: 1px solid #ced4da;
             border-radius: 4px;
             font-size: 13px;
             resize: vertical;
-            margin-bottom: 10px;
+        }
+
+        .input-evolucao {
+            height: 140px;
+            margin-bottom: 15px;
+        }
+
+        .panel-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         button {
             background-color: #0056b3;
             color: #ffffff;
             border: none;
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 10px 20px;
+            font-size: 14px;
             font-weight: 600;
             border-radius: 4px;
             cursor: pointer;
-            margin-right: 10px;
-            margin-bottom: 5px;
+            transition: background 0.2s;
         }
 
         button:hover {
@@ -157,283 +175,253 @@
             background-color: #5a6268;
         }
 
-        .output-box {
-            background-color: #f8f9fa;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 13px;
-            white-space: pre-wrap;
-            margin-top: 10px;
-            min-height: 50px;
-            color: #212529;
-        }
-
-        .global-actions {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #dee2e6;
-            text-align: left;
-        }
-
         .status-text {
-            display: inline-block;
-            margin-left: 10px;
             font-size: 13px;
             font-weight: 600;
         }
-        
         .success { color: #28a745; }
         .error { color: #dc3545; }
         .processing { color: #ffc107; }
+
+        /* Consolidador Final */
+        .consolidador-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .output-global {
+            height: 300px;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f8f9fa;
+            color: #212529;
+            font-size: 13px;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Passagem de Plantão Ideal — Diálogo entre Plantonistas</h1>
-        <div class="subtitle">Projeto Prompts Médicos Poderosos · Otimização de Transmissão de Casos Clínicos</div>
+        <div class="subtitle">Projeto Prompts Médicos Poderosos · Gestão Inteligente de Leitos Críticos</div>
     </header>
 
-    <div class="config-section">
-        <div class="config-title">Configurações da API NVIDIA NIM</div>
-        <div class="input-group">
-            <div class="input-cell" style="width: 120px;"><label for="api-key">NVIDIA API Key:</label></div>
-            <div class="input-cell"><input type="password" id="api-key" placeholder="Insira sua nvapi-key aqui..." value=""></div>
+    <!-- MAPA DA SALA VERMELHA -->
+    <div class="section-title">Sala Vermelha (11 Leitos)</div>
+    <div id="grid-vermelha" class="leitos-grid"></div>
+
+    <!-- MAPA DA RETAGUARDA DO TRAUMA -->
+    <div class="section-title">Sala Retaguarda do Trauma (6 Leitos)</div>
+    <div id="grid-trauma" class="leitos-grid"></div>
+
+    <!-- ÁREA DE INPUT SELECIONADA -->
+    <div class="work-area" id="work-area" style="display: none;">
+        <div class="work-header">
+            <span id="work-leito-title">Selecione um Leito</span>
+            <span id="work-lampada" class="lampada vermelha"></span>
         </div>
-        <div class="input-group" style="margin-top: 10px;">
-            <div class="input-cell" style="width: 120px;"><label for="model-select">Modelo:</label></div>
-            <div class="input-cell">
-                <select id="model-select">
-                    <option value="meta/llama-3.3-70b-instruct">Meta Llama 3.3 70B Instruct (Recomendado)</option>
-                    <option value="deepseek-ai/deepseek-v4-pro">DeepSeek V4 Pro</option>
-                </select>
+        <textarea id="txt-evolucao" class="input-evolucao" placeholder="Cole aqui a evolução médica"></textarea>
+        <div class="panel-actions">
+            <button id="btn-processar">Processar com IA</button>
+            <button id="btn-limpar" class="secondary">Limpar Leito</button>
+            <span id="status-processamento" class="status-text"></span>
+        </div>
+    </div>
+
+    <!-- CONSOLIDADO GLOBAL -->
+    <div class="consolidador-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <span style="font-weight: 700; font-size: 16px; color: #495057;">Histórico Temporal Consolidado do Plantão</span>
+            <div>
+                <button id="btn-copiar-tudo" style="background-color: #212529;">Copiar Relatório Completo</button>
+                <button id="btn-baixar-txt" class="secondary" style="background-color: #495057;">Baixar em .TXT</button>
             </div>
         </div>
-    </div>
-
-    <div class="grid-container">
-        <!-- SALA VERMELHA -->
-        <div class="section-title">Sala Vermelha (11 Leitos)</div>
-        <div id="sala-vermelha-container"></div>
-
-        <!-- RETAGUARDA DO TRAUMA -->
-        <div class="section-title">Sala Retaguarda do Trauma (6 Leitos)</div>
-        <div id="sala-trauma-container"></div>
-    </div>
-
-    <div class="global-actions">
-        <button id="btn-compilar-tudo" class="secondary" style="background-color: #212529; padding: 12px 24px; font-size: 15px;">Gerar Arquivo Único Consolidador</button>
-        <button id="btn-baixar-txt" class="secondary" style="background-color: #495057; padding: 12px 24px; font-size: 15px; display: none;">Salvar Tudo em .TXT</button>
-        <div style="margin-top: 15px;">
-            <label class="form-label" style="font-weight: 700;">Arquivo Único Disponível para Cópia (Todos os Casos Processados):</label>
-            <textarea id="output-global" style="height: 250px; font-family: monospace; background-color: #f8f9fa;" readonly placeholder="Os resumos estruturados de todos os pacientes processados aparecerão aqui consolidados..."></textarea>
-        </div>
+        <textarea id="output-global" class="output-global" readonly placeholder="Os resumos estruturados com data e hora serão acumulados aqui à medida que os leitos forem processados..."></textarea>
     </div>
 
     <script>
+        // Injeção segura via GitHub Secrets no ambiente de Build
+        // Caso esteja rodando localmente sem ambiente, ele tentará ler a constante global configurada pela Action
+        const NVIDIA_API_KEY = window._ENV_?.NVIDIA_API_KEY || "SUA_CHAVE_AQUI_CASO_LOCAL";
+
         const CONFIG = {
             numVermelha: 11,
             numTrauma: 6,
             systemPrompt: `Você é um assistente de inteligência clínica altamente formal. Sua única função é processar uma evolução médica e gerar um resumo extremamente conciso para passagem de plantão de no máximo 50 palavras, garantindo que o diálogo de transmissão dure menos de 2 minutos.
 
-Diretrizes Absolutas de Resposta:
-1. NUNCA armazene ou inclua dados que identifiquem nominalmente o paciente, médicos ou equipe.
+Diretrizes Absolutas:
+1. NUNCA inclua dados que identifiquem nominalmente o paciente, médicos ou equipe.
 2. Comprima e resuma os dados para NO MÁXIMO 50 PALAVRAS no total. Seja extremamente objetivo.
-3. Se o peso não estiver descrito na evolução, assuma obrigatoriamente 75Kg como padrão universal. Se estiver descrito, use o informado. Outros dados biométricos e sexo devem ser extraídos se informados.
+3. Se o peso não estiver descrito na evolução, assuma obrigatoriamente 75Kg como padrão universal.
 4. Se houver critérios de alta médica da UTI ou Sala Vermelha presentes na evolução, adicione explicitamente a frase exata: "Preenche critérios de alta médica para a enfermaria."
-5. Use linguagem puramente clássica, formal, sem emojis, sem gírias, sem maneirismos e evite abreviações não consagradas.
-6. Não faça sugestões. Não adicione opiniões. Reforce estritamente a necessidade de definição de condutas imediatas e pendências.
-7. O formato de saída deve seguir estritamente o modelo de texto plano abaixo para fácil cópia, preenchendo apenas com as informações extraídas de forma contínua:
-
-[IDENTIFICAÇÃO DO LEITO]
-Motivo: [Motivo] | Dias: [X] | Ventilação: [Modo] | Hemodinâmica: [Estável/Instável]
-Pontos de Atenção/Urgente: [Dieta, cirurgia, sangue, etc]
-Pendências/Imediato: [Condutas do round/exames]
-Investimento/Limite: [Definição de reanimação e limites]`
+5. Use linguagem puramente clássica, formal, sem emojis, sem gírias, sem maneirismos. Não sugira nada. Reforce as condutas e pendências imediatas.
+6. Formato de saída estrito em texto plano.`
         };
 
-        function renderLeitos() {
-            const vermelhaCont = document.getElementById('sala-vermelha-container');
-            const traumaCont = document.getElementById('sala-trauma-container');
+        const dadosLeitos = {}; 
+        let leitoAtual Ativo = null;
 
-            // Render Sala Vermelha
+        function inicializarPainel() {
+            const gridVermelha = document.getElementById('grid-vermelha');
+            const gridTrauma = document.getElementById('grid-trauma');
+
+            // Criar Sala Vermelha (1 a 11)
             for (let i = 1; i <= CONFIG.numVermelha; i++) {
-                vermelhaCont.appendChild(createPatientCard(`Leito Vermelha ${i}`));
+                const nome = `Leito Vermelha ${i}`;
+                dadosLeitos[nome] = { evolucao: "", resumo: "", timestamp: "", preenchido: false };
+                gridVermelha.appendChild(criarBotaoLeito(nome));
             }
 
-            // Render Trauma
+            // Criar Retaguarda do Trauma (1 a 6)
             for (let i = 1; i <= CONFIG.numTrauma; i++) {
-                traumaCont.appendChild(createPatientCard(`Leito Retaguarda do Trauma ${i}`));
+                const nome = `Leito Trauma ${i}`;
+                dadosLeitos[nome] = { evolucao: "", resumo: "", timestamp: "", preenchido: false };
+                gridTrauma.appendChild(criarBotaoLeito(nome));
             }
         }
 
-        function createPatientCard(leitoNome) {
+        function criarBotaoLeito(nome) {
             const card = document.createElement('div');
-            card.className = 'patient-card';
-            card.id = `card-${leitoNome.replace(/\s+/g, '-')}`;
-
+            card.className = 'leito-card';
+            card.id = `btn-${nome.replace(/\s+/g, '-')}`;
             card.innerHTML = `
-                <div class="patient-header">${leitoNome}</div>
-                <label class="form-label">Cole aqui a evolução médica</label>
-                <textarea class="evolucao-input" placeholder="Insira o texto do prontuário ou evolução médica deste leito..."></textarea>
-                <div>
-                    <button class="btn-processar">Processar Caso</button>
-                    <button class="btn-limpar secondary">Limpar</button>
-                    <span class="status-text"></span>
-                </div>
-                <div class="output-box" id="output-${leitoNome.replace(/\s+/g, '-')}" title="Clique para copiar" style="cursor:pointer; display:none;"></div>
+                <div class="leito-name">${nome}</div>
+                <span class="lampada vermelha" id="lamp-${nome.replace(/\s+/g, '-')}"></span>
             `;
-
-            const btnProcessar = card.querySelector('.btn-processar');
-            const btnLimpar = card.querySelector('.btn-limpar');
-            const textarea = card.querySelector('.evolucao-input');
-            const outputBox = card.querySelector('.output-box');
-            const statusText = card.querySelector('.status-text');
-
-            btnProcessar.addEventListener('click', () => processarPaciente(leitoNome, textarea.value, outputBox, statusText));
-            btnLimpar.addEventListener('click', () => {
-                textarea.value = '';
-                outputBox.innerText = '';
-                outputBox.style.display = 'none';
-                statusText.innerText = '';
-                atualizarGlobal();
-            });
-
-            outputBox.addEventListener('click', () => {
-                navigator.clipboard.writeText(outputBox.innerText);
-                alert(`${leitoNome}: Conteúdo copiado para a área de transferência.`);
-            });
-
+            card.addEventListener('click', () => selecionarLeito(nome));
             return card;
         }
 
-        async function processarPaciente(leito, textoEvolucao, outputBox, statusText) {
-            const apiKey = document.getElementById('api-key').value.trim();
-            const modelo = document.getElementById('model-select').value;
-
-            if (!textoEvolucao.trim()) {
-                statusText.className = "status-text error";
-                statusText.innerText = "Por favor, cole a evolução médica.";
-                return;
+        function selecionarLeito(nome) {
+            if (leitoAtualAtivo) {
+                document.getElementById(`btn-${leitoAtualAtivo.replace(/\s+/g, '-')}`).classList.remove('active');
             }
+            leitoAtualAtivo = nome;
+            document.getElementById(`btn-${nome.replace(/\s+/g, '-')}`).classList.add('active');
 
-            if (!apiKey) {
+            document.getElementById('work-area').style.display = 'block';
+            document.getElementById('work-leito-title').innerText = `Configurando: ${nome}`;
+            document.getElementById('txt-evolucao').value = dadosLeitos[nome].evolucao;
+            
+            const lampadaWork = document.getElementById('work-lampada');
+            lampadaWork.className = `lampada ${dadosLeitos[nome].preenchido ? 'verde' : 'vermelha'}`;
+            document.getElementById('status-processamento').innerText = "";
+        }
+
+        document.getElementById('btn-processar').addEventListener('click', async () => {
+            if (!leitoAtualAtivo) return;
+            const textoInput = document.getElementById('txt-evolucao').value.trim();
+            const statusText = document.getElementById('status-processamento');
+
+            if (!textoInput) {
                 statusText.className = "status-text error";
-                statusText.innerText = "Chave API da NVIDIA ausente.";
+                statusText.innerText = "Por favor, cole a evolução médica primeiro.";
                 return;
             }
 
             statusText.className = "status-text processing";
-            statusText.innerText = "Processando IA...";
-            outputBox.style.display = 'none';
+            statusText.innerText = "IA processando prontuário...";
 
             try {
                 const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${apiKey}`
+                        "Authorization": `Bearer ${NVIDIA_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: modelo,
+                        model: "meta/llama-3.3-70b-instruct",
                         messages: [
                             { role: "system", content: CONFIG.systemPrompt },
-                            { role: "user", content: `Leito Atual: ${leito}
-
-Evolução Médica Inserida:
-${textoEvolucao}` }
+                            { role: "user", content: `Leito: ${leitoAtualAtivo}\n\nProntuário:\n${textoInput}` }
                         ],
                         temperature: 0.1,
                         top_p: 0.95,
-                        max_tokens: 1024,
+                        max_tokens: 512,
                         stream: false
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`Erro na API (${response.status})`);
-                }
+                if (!response.ok) throw new Error("Falha na comunicação com a API NVIDIA.");
 
                 const data = await response.json();
-                const resultado = data.choices[0].message.content.trim();
+                const resumoGerado = data.choices[0].message.content.trim();
 
-                outputBox.innerText = resultado;
-                outputBox.style.style = 'block';
-                outputBox.style.display = 'block';
+                // Salvar dados do leito
+                dadosLeitos[leitoAtualAtivo].evolucao = textoInput;
+                dadosLeitos[leitoAtualAtivo].resumo = resumoGerado;
+                dadosLeitos[leitoAtualAtivo].preenchido = true;
+                dadosLeitos[leitoAtualAtivo].timestamp = new Date().toLocaleString('pt-BR');
+
+                // Atualizar Lâmpadas (Painel e Work)
+                document.getElementById(`lamp-${leitoAtualAtivo.replace(/\s+/g, '-')}`).className = "lampada verde";
+                document.getElementById('work-lampada').className = "lampada verde";
+
                 statusText.className = "status-text success";
-                statusText.innerText = "Concluído.";
-                
-                atualizarGlobal();
+                statusText.innerText = "Caso integrado com sucesso.";
 
-            } catch (error) {
+                atualizarTextoConsolidado();
+
+            } catch (err) {
                 statusText.className = "status-text error";
-                statusText.innerText = `Falha: ${error.message}`;
-            }
-        }
-
-        function atualizarGlobal() {
-            const outputs = document.querySelectorAll('.output-box');
-            let textoConsolidado = "==================================================
-";
-            textoConsolidado += "   RELATÓRIO CONSOLIDADO: PASSAGEM DE PLANTÃO
-";
-            textoConsolidado += `   Gerado em: ${new Date().toLocaleString('pt-BR')}
-`;
-            textoConsolidado += "==================================================
-
-";
-            
-            let temConteudo = false;
-
-            outputs.forEach(box => {
-                if (box.innerText.trim()) {
-                    temConteudo = true;
-                    textoConsolidado += box.innerText + "
-
---------------------------------------------------
-
-";
-                }
-            });
-
-            const globalTextArea = document.getElementById('output-global');
-            if (temConteudo) {
-                globalTextArea.value = textoConsolidado;
-                document.getElementById('btn-baixar-txt').style.display = 'inline-block';
-            } else {
-                globalTextArea.value = '';
-                document.getElementById('btn-baixar-txt').style.display = 'none';
-            }
-        }
-
-        document.getElementById('btn-compilar-tudo').addEventListener('click', () => {
-            atualizarGlobal();
-            const globalTextArea = document.getElementById('output-global');
-            if (globalTextArea.value.trim()) {
-                globalTextArea.select();
-                navigator.clipboard.writeText(globalTextArea.value);
-                alert("Todos os casos compilados foram copiados para a área de transferência!");
-            } else {
-                alert("Nenhum caso foi processado ainda. Insira as evoluções e clique em 'Processar Caso'.");
+                statusText.innerText = "Erro ao processar: Chave inválida ou limite excedido.";
             }
         });
 
-        document.getElementById('btn-baixar-txt').addEventListener('click', () => {
-            const texto = document.getElementById('output-global').value;
-            if (!texto) return;
+        document.getElementById('btn-limpar').addEventListener('click', () => {
+            if (!leitoAtualAtivo) return;
+            dadosLeitos[leitoAtualAtivo] = { evolucao: "", resumo: "", timestamp: "", preenchido: false };
+            document.getElementById('txt-evolucao').value = "";
+            document.getElementById(`lamp-${leitoAtualAtivo.replace(/\s+/g, '-')}`).className = "lampada vermelha";
+            document.getElementById('work-lampada').className = "lampada vermelha";
+            document.getElementById('status-processamento').innerText = "";
+            atualizarTextoConsolidado();
+        });
 
-            const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+        function atualizarTextoConsolidado() {
+            const outGlobal = document.getElementById('output-global');
+            let txtCompleto = `======================================================================\n`;
+            txtCompleto += `   RELATÓRIO CONSOLIDADO: PASSAGEM DE PLANTÃO\n`;
+            txtCompleto += `   EMISSÃO DA ATA: ${new Date().toLocaleString('pt-BR')}\n`;
+            txtCompleto += `======================================================================\n\n`;
+
+            let ativos = 0;
+            for (const [nomeLeito, dados] of Object.entries(dadosLeitos)) {
+                if (dados.preenchido) {
+                    ativos++;
+                    txtCompleto += `[${dados.timestamp}] - ${nomeLeito.toUpperCase()}\n`;
+                    txtCompleto += `${dados.resumo}\n`;
+                    txtCompleto += `----------------------------------------------------------------------\n\n`;
+                }
+            }
+
+            outGlobal.value = ativos > 0 ? txtCompleto : "";
+        }
+
+        document.getElementById('btn-copiar-tudo').addEventListener('click', () => {
+            const outGlobal = document.getElementById('output-global');
+            if (!outGlobal.value) return alert("Nenhum dado consolidado para copiar.");
+            outGlobal.select();
+            navigator.clipboard.writeText(outGlobal.value);
+            alert("Ata de passagem de plantão copiada para a área de transferência!");
+        });
+
+        document.getElementById('btn-baixar-txt').addEventListener('click', () => {
+            const outGlobal = document.getElementById('output-global').value;
+            if (!outGlobal) return alert("Não há dados estruturados para exportação.");
+            
+            const blob = new Blob([outGlobal], { type: 'text/plain;charset=utf-8' });
             const link = document.createElement('a');
+            const dataFormatada = new Date().toISOString().slice(0,10);
             link.href = URL.createObjectURL(blob);
-            link.download = `Passagem_de_Plantao_${new Date().toISOString().slice(0,10)}.txt`;
+            link.download = `Passagem_Plantao_Consolidada_${dataFormatada}.txt`;
             link.click();
             URL.revokeObjectURL(link.href);
         });
 
-        // Inicializar aplicação
-        renderLeitos();
+        inicializarPainel();
     </script>
 </body>
 </html>
