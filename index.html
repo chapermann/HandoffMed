@@ -234,12 +234,12 @@
                 <button id="btn-baixar-txt" class="secondary" style="background-color: #495057;">Baixar em .TXT</button>
             </div>
         </div>
-        <textarea id="output-global" class="output-global" readonly placeholder="Os resumos estruturados com data e hora serão acumulados aqui à medida que os leitos forem processados..."></textarea>
+        <textarea id="output-global" class="output-global" placeholder="Os resumos estruturados com data e hora serão acumulados aqui à medida que os leitos forem processados..."></textarea>
     </div>
 
     <script>
-        // Injeção segura via GitHub Secrets no ambiente de Build
-        const NVIDIA_API_KEY = "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";
+        // O GitHub Actions vai gerenciar essa constante em tempo de build
+        const NVIDIA_API_KEY = "CHAVE_API_NVIDIA_AUTOGERADA";
 
         const CONFIG = {
             numVermelha: 11,
@@ -262,14 +262,12 @@ Diretrizes Absolutas:
             const gridVermelha = document.getElementById('grid-vermelha');
             const gridTrauma = document.getElementById('grid-trauma');
 
-            // Criar Sala Vermelha (1 a 11)
             for (let i = 1; i <= CONFIG.numVermelha; i++) {
                 const nome = `Leito Vermelha ${i}`;
                 dadosLeitos[nome] = { evolucao: "", resumo: "", timestamp: "", preenchido: false };
                 gridVermelha.appendChild(criarBotaoLeito(nome));
             }
 
-            // Criar Retaguarda do Trauma (1 a 6)
             for (let i = 1; i <= CONFIG.numTrauma; i++) {
                 const nome = `Leito Trauma ${i}`;
                 dadosLeitos[nome] = { evolucao: "", resumo: "", timestamp: "", preenchido: false };
@@ -340,18 +338,16 @@ Diretrizes Absolutas:
                     })
                 });
 
-                if (!response.ok) throw new Error("Falha na comunicação com a API NVIDIA.");
+                if (!response.ok) throw new Error("Erro na credencial ou na resposta dos servidores NVIDIA.");
 
                 const data = await response.json();
                 const resumoGerado = data.choices[0].message.content.trim();
 
-                // Salvar dados do leito
                 dadosLeitos[leitoAtualAtivo].evolucao = textoInput;
                 dadosLeitos[leitoAtualAtivo].resumo = resumoGerado;
                 dadosLeitos[leitoAtualAtivo].preenchido = true;
                 dadosLeitos[leitoAtualAtivo].timestamp = new Date().toLocaleString('pt-BR');
 
-                // Atualizar Lâmpadas (Painel e Work)
                 document.getElementById(`lamp-${leitoAtualAtivo.replace(/\s+/g, '-')}`).className = "lampada verde";
                 document.getElementById('work-lampada').className = "lampada verde";
 
@@ -362,7 +358,7 @@ Diretrizes Absolutas:
 
             } catch (err) {
                 statusText.className = "status-text error";
-                statusText.innerText = "Erro ao processar: Verifique a configuração da chave.";
+                statusText.innerText = "Erro ao processar: Verifique a configuração da chave nos Secrets.";
             }
         });
 
