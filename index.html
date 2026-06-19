@@ -80,7 +80,7 @@
         // O GitHub Actions insere a chave armazenada nos Secrets de forma automatizada aqui
         const NVIDIA_API_KEY = "CHAVE_API_NVIDIA_AUTOGERADA";
 
-        // INSIRA O SEU ENDEREÇO GERADO NA CLOUDFLARE ENTRE AS ASPAS ABAIXO:
+        // SEU ENDEREÇO GERADO NA CLOUDFLARE:
         const CLOUDFLARE_WORKER_URL = "https://nvidia-proxy.chapermann.workers.dev/";
 
         const CONFIG = {
@@ -161,7 +161,6 @@ Diretrizes Absolutas:
             statusText.innerText = "IA processando prontuário...";
 
             try {
-                // Execução estruturada idêntica às definições da sua linha de código da OpenAI
                 const response = await fetch(CLOUDFLARE_WORKER_URL, {
                     method: "POST",
                     headers: {
@@ -185,7 +184,9 @@ Diretrizes Absolutas:
                 if (!response.ok) throw new Error("Erro na resposta do servidor.");
 
                 const data = await response.json();
-                const resumoGerado = data.choices[0].message.content.strip ? data.choices[0].message.content.strip() : data.choices[0].message.content.trim();
+                
+                // CORREÇÃO AQUI: Captura limpa compatível com JavaScript (.trim() puro)
+                const resumoGerado = data.choices[0].message.content.trim();
 
                 dadosLeitos[leitoAtualAtivo].evolucao = textoInput;
                 dadosLeitos[leitoAtualAtivo].resumo = resumoGerado;
