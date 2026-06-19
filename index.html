@@ -320,7 +320,7 @@ document.getElementById('btn-processar').addEventListener('click', async () => {
 
             try {
                 // Ajuste de Headers e tratamento específico para evitar bloqueio CORS em navegadores comuns
-                const response = await fetch("https://nvidia-api-proxy.chapermann.workers.dev/", {
+                const response = await fetch("https://nvidia-proxy.chapermann.workers.dev/", {
             method: "POST",
                     headers: {
                         "Content-Type": "application/json",
