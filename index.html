@@ -207,15 +207,12 @@
         <div class="subtitle">Projeto Prompts Médicos Poderosos · Gestão Inteligente de Leitos Críticos</div>
     </header>
 
-    <!-- MAPA DA SALA VERMELHA -->
     <div class="section-title">Sala Vermelha (11 Leitos)</div>
     <div id="grid-vermelha" class="leitos-grid"></div>
 
-    <!-- MAPA DA RETAGUARDA DO TRAUMA -->
     <div class="section-title">Sala Retaguarda do Trauma (6 Leitos)</div>
     <div id="grid-trauma" class="leitos-grid"></div>
 
-    <!-- ÁREA DE INPUT SELECIONADA -->
     <div class="work-area" id="work-area" style="display: none;">
         <div class="work-header">
             <span id="work-leito-title">Selecione um Leito</span>
@@ -229,7 +226,6 @@
         </div>
     </div>
 
-    <!-- CONSOLIDADO GLOBAL -->
     <div class="consolidador-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <span style="font-weight: 700; font-size: 16px; color: #495057;">Histórico Temporal Consolidado do Plantão</span>
@@ -243,8 +239,7 @@
 
     <script>
         // Injeção segura via GitHub Secrets no ambiente de Build
-        // Caso esteja rodando localmente sem ambiente, ele tentará ler a constante global configurada pela Action
-        const NVIDIA_API_KEY = window._ENV_?.NVIDIA_API_KEY || "SUA_CHAVE_AQUI_CASO_LOCAL";
+        const NVIDIA_API_KEY = "SUA_CHAVE_AQUI_CASO_LOCAL";
 
         const CONFIG = {
             numVermelha: 11,
@@ -254,14 +249,14 @@
 Diretrizes Absolutas:
 1. NUNCA inclua dados que identifiquem nominalmente o paciente, médicos ou equipe.
 2. Comprima e resuma os dados para NO MÁXIMO 50 PALAVRAS no total. Seja extremamente objetivo.
-3. Se o peso não estiver descrito na evolução, assuma obrigatoriamente 75Kg como padrão universal.
+3. Se o peso não estiver descrito na evolução, assumuam obrigatoriamente 75Kg como padrão universal.
 4. Se houver critérios de alta médica da UTI ou Sala Vermelha presentes na evolução, adicione explicitamente a frase exata: "Preenche critérios de alta médica para a enfermaria."
 5. Use linguagem puramente clássica, formal, sem emojis, sem gírias, sem maneirismos. Não sugira nada. Reforce as condutas e pendências imediatas.
 6. Formato de saída estrito em texto plano.`
         };
 
         const dadosLeitos = {}; 
-        let leitoAtual Ativo = null;
+        let leitoAtualAtivo = null;
 
         function inicializarPainel() {
             const gridVermelha = document.getElementById('grid-vermelha');
@@ -296,7 +291,8 @@ Diretrizes Absolutas:
 
         function selecionarLeito(nome) {
             if (leitoAtualAtivo) {
-                document.getElementById(`btn-${leitoAtualAtivo.replace(/\s+/g, '-')}`).classList.remove('active');
+                const cardAnterior = document.getElementById(`btn-${leitoAtualAtivo.replace(/\s+/g, '-')}`);
+                if (cardAnterior) cardAnterior.classList.remove('active');
             }
             leitoAtualAtivo = nome;
             document.getElementById(`btn-${nome.replace(/\s+/g, '-')}`).classList.add('active');
@@ -366,7 +362,7 @@ Diretrizes Absolutas:
 
             } catch (err) {
                 statusText.className = "status-text error";
-                statusText.innerText = "Erro ao processar: Chave inválida ou limite excedido.";
+                statusText.innerText = "Erro ao processar: Verifique a configuração da chave.";
             }
         });
 
