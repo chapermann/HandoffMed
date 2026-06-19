@@ -77,10 +77,10 @@
     </div>
 
     <script>
-        // O GitHub Actions insere a chave armazenada nos Secrets de forma automatizada aqui
-        const NVIDIA_API_KEY = "CHAVE_API_NVIDIA_AUTOGERADA";
+        // CHAVE INJETADA FIXA PARA FORÇAR O FUNCIONAMENTO DO WORKER CLOUDFLARE
+        const NVIDIA_API_KEY = "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";
 
-        // SEU ENDEREÇO GERADO NA CLOUDFLARE:
+        // LINK DIRETO DO SEU WORKER QUE ELIMINA O ERRO DE CORS
         const CLOUDFLARE_WORKER_URL = "https://nvidia-proxy.chapermann.workers.dev/";
 
         const CONFIG = {
@@ -161,6 +161,7 @@ Diretrizes Absolutas:
             statusText.innerText = "IA processando prontuário...";
 
             try {
+                // REDIRECIONAMENTO FIXO PARA O WORKER CLOUDFLARE
                 const response = await fetch(CLOUDFLARE_WORKER_URL, {
                     method: "POST",
                     headers: {
@@ -184,8 +185,6 @@ Diretrizes Absolutas:
                 if (!response.ok) throw new Error("Erro na resposta do servidor.");
 
                 const data = await response.json();
-                
-                // CORREÇÃO AQUI: Captura limpa compatível com JavaScript (.trim() puro)
                 const resumoGerado = data.choices[0].message.content.trim();
 
                 dadosLeitos[leitoAtualAtivo].evolucao = textoInput;
