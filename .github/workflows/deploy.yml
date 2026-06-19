@@ -1,0 +1,37 @@
+name: Deploy Passagem de Plantao
+
+on:
+  push:
+    branches:
+      - main  # Se a sua branch principal se chamar 'master', mude essa palavra para master
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Injetar a Chave API com Segurança
+        run: |
+          sed -i 's|SUA_CHAVE_AQUI_CASO_LOCAL|${{ secrets.NVIDIA_API_KEY }}|g' index.html
+
+      - name: Configurar o GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload do Artefato
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
