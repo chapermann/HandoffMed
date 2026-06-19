@@ -3,7 +3,7 @@ name: Deploy Passagem de Plantao
 on:
   push:
     branches:
-      - main  # Se a sua branch principal se chamar 'master', mude essa palavra para master
+      - main
 
 permissions:
   contents: read
@@ -20,9 +20,12 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Injetar a Chave API com Segurança
+      - name: Injetar a Chave API com Segurança Absoluta
+        env:
+          CHAVE_NVIDIA: ${{ secrets.NVIDIA_API_KEY }}
         run: |
-          sed -i 's|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|${{ secrets.NVIDIA_API_KEY }}|g' index.html
+          # Substituição limpa usando variáveis nativas, evitando quebras por caracteres especiais
+          sed -i "s|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|g" index.html
 
       - name: Configurar o GitHub Pages
         uses: actions/configure-pages@v4
