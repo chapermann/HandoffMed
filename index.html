@@ -304,7 +304,7 @@ Diretrizes Absolutas:
             document.getElementById('status-processamento').innerText = "";
         }
 
-        document.getElementById('btn-processar').addEventListener('click', async () => {
+document.getElementById('btn-processar').addEventListener('click', async () => {
             if (!leitoAtualAtivo) return;
             const textoInput = document.getElementById('txt-evolucao').value.trim();
             const statusText = document.getElementById('status-processamento');
@@ -319,11 +319,12 @@ Diretrizes Absolutas:
             statusText.innerText = "IA processando prontuário...";
 
             try {
+                // Ajuste de Headers e tratamento específico para evitar bloqueio CORS em navegadores comuns
                 const response = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${NVIDIA_API_KEY}`
+                        "Authorization": `Bearer ${NVIDIA_API_KEY.trim()}`
                     },
                     body: JSON.stringify({
                         model: "meta/llama-3.3-70b-instruct",
@@ -333,12 +334,15 @@ Diretrizes Absolutas:
                         ],
                         temperature: 0.1,
                         top_p: 0.95,
-                        max_tokens: 512,
-                        stream: false
+                        max_tokens: 512
                     })
                 });
 
-                if (!response.ok) throw new Error("Erro na credencial ou na resposta dos servidores NVIDIA.");
+                if (response.status === 401) {
+                    throw new Error("Chave API inválida ou não injetada corretamente pelo GitHub.");
+                }
+
+                if (!response.ok) throw new Error(`Erro na API NVIDIA. Status: ${response.status}`);
 
                 const data = await response.json();
                 const resumoGerado = data.choices[0].message.content.trim();
@@ -357,8 +361,10 @@ Diretrizes Absolutas:
                 atualizarTextoConsolidado();
 
             } catch (err) {
+                console.error("Erro capturado:", err);
                 statusText.className = "status-text error";
-                statusText.innerText = "Erro ao processar: Verifique a configuração da chave nos Secrets.";
+                // Explicação clara se o CORS ou o bloqueio de rede hospitalar persistirem
+                statusText.innerText = `Erro de conexão: ${err.message}. Se persistir, o firewall da rede ou a política CORS da API bloqueou a requisição direta pelo navegador.`;
             }
         });
 
