@@ -3,443 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HandoffMed - Passagem de Plantão</title>
+  <title>HandoffMed - Passagem de Plantão e Round Médico</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Open Sans', sans-serif;
-      background-color: #f4f7fa;
-      color: #2c3e50;
-      padding: 20px;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      padding: 30px;
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #1a3b5d;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    h1 small {
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: #7f8c8d;
-    }
-
-    .subtitle {
-      color: #7f8c8d;
-      margin-bottom: 30px;
-      border-left: 4px solid #3498db;
-      padding-left: 16px;
-      font-size: 0.95rem;
-    }
-
-    .grid-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 30px;
-    }
-
-    .section-card {
-      background: #f8fafc;
-      border-radius: 10px;
-      padding: 20px;
-      border: 1px solid #e9edf2;
-    }
-
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #1a3b5d;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-title .badge {
-      background: #3498db;
-      color: #fff;
-      font-size: 0.7rem;
-      border-radius: 20px;
-      padding: 2px 10px;
-      margin-left: 8px;
-    }
-
-    .leitos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 12px;
-    }
-
-    .leito-btn {
-      background: #fff;
-      border: 2px solid #dce3ec;
-      border-radius: 8px;
-      padding: 12px 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #2c3e50;
-      transition: all 0.2s ease;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-    }
-
-    .leito-btn:hover {
-      border-color: #3498db;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
-    }
-
-    .leito-btn:active {
-      transform: scale(0.96);
-    }
-
-    .leito-btn .indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.3s ease;
-    }
-
-    .indicator.red {
-      background-color: #e74c3c;
-      box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
-    }
-
-    .indicator.green {
-      background-color: #2ecc71;
-      box-shadow: 0 0 8px rgba(46, 204, 113, 0.4);
-    }
-
-    .leito-btn .leito-num {
-      font-size: 0.75rem;
-      color: #7f8c8d;
-    }
-
-    .main-area {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 30px;
-    }
-
-    .panel {
-      background: #f8fafc;
-      border-radius: 10px;
-      padding: 20px;
-      border: 1px solid #e9edf2;
-    }
-
-    .panel h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #1a3b5d;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .panel textarea {
-      width: 100%;
-      min-height: 200px;
-      border: 1px solid #dce3ec;
-      border-radius: 8px;
-      padding: 12px;
-      font-family: 'Open Sans', sans-serif;
-      font-size: 0.9rem;
-      resize: vertical;
-      transition: border-color 0.2s;
-    }
-
-    .panel textarea:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-    }
-
-    .panel .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      background: #ecf0f1;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #2c3e50;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid transparent;
-    }
-
-    .btn-primary {
-      background: #3498db;
-      color: #fff;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: #2980b9;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
-    }
-
-    .btn-success {
-      background: #2ecc71;
-      color: #fff;
-    }
-
-    .btn-success:hover {
-      background: #27ae60;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(46, 204, 113, 0.25);
-    }
-
-    .btn-danger {
-      background: #e74c3c;
-      color: #fff;
-    }
-
-    .btn-danger:hover {
-      background: #c0392b;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
-    }
-
-    .output-area {
-      background: #fff;
-      border: 1px solid #e9edf2;
-      border-radius: 10px;
-      padding: 20px;
-      min-height: 200px;
-      white-space: pre-wrap;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #2c3e50;
-      max-height: 500px;
-      overflow-y: auto;
-      font-family: 'Open Sans', sans-serif;
-    }
-
-    .output-area:empty::before {
-      content: 'Os resumos gerados aparecerão aqui...';
-      color: #bdc3c7;
-      font-style: italic;
-    }
-
-    .footer-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      border-top: 1px solid #e9edf2;
-      padding-top: 20px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .status-msg {
-      padding: 10px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      background: #f1f9ff;
-      border-left: 4px solid #3498db;
-    }
-
-    .status-msg.error {
-      background: #fff5f5;
-      border-left-color: #e74c3c;
-      color: #c0392b;
-    }
-
-    .status-msg.success {
-      background: #f0fff4;
-      border-left-color: #2ecc71;
-      color: #27ae60;
-    }
-
-    .current-leito-label {
-      font-weight: 600;
-      color: #1a3b5d;
-      background: #eef2f7;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      margin-left: auto;
-    }
-
-    .loading-spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid #fff;
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 1024px) {
-      .grid-section {
-        grid-template-columns: 1fr;
-      }
-      .main-area {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 16px;
-      }
-      .leitos-grid {
-        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-      }
-      .leito-btn {
-        font-size: 0.75rem;
-        padding: 8px 4px;
-      }
-      .footer-actions {
-        flex-direction: column;
-      }
-      .current-leito-label {
-        margin-left: 0;
-        width: 100%;
-        text-align: center;
-        margin-top: 8px;
-      }
-    }
-
-    .output-area::-webkit-scrollbar {
-      width: 6px;
-    }
-    .output-area::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    .output-area::-webkit-scrollbar-thumb {
-      background: #c1c7cd;
-      border-radius: 10px;
-    }
-    .output-area::-webkit-scrollbar-thumb:hover {
-      background: #a0a7ae;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Open Sans', sans-serif; background-color: #f4f7fa; color: #2c3e50; padding: 20px; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 30px; }
+    h1 { font-size: 2rem; font-weight: 700; color: #1a3b5d; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+    h1 small { font-size: 0.9rem; font-weight: 400; color: #7f8c8d; }
+    .subtitle { color: #7f8c8d; margin-bottom: 30px; border-left: 4px solid #3498db; padding-left: 16px; font-size: 0.95rem; }
+    .grid-section { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+    .section-card { background: #f8fafc; border-radius: 10px; padding: 20px; border: 1px solid #e9edf2; }
+    .section-title { font-size: 1.1rem; font-weight: 600; color: #1a3b5d; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-title .badge { background: #3498db; color: #fff; font-size: 0.7rem; border-radius: 20px; padding: 2px 10px; margin-left: 8px; }
+    .leitos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+    .leito-btn { background: #fff; border: 2px solid #dce3ec; border-radius: 8px; padding: 12px 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #2c3e50; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+    .leito-btn:hover { border-color: #3498db; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(52,152,219,0.15); }
+    .leito-btn:active { transform: scale(0.96); }
+    .leito-btn .indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; }
+    .indicator.red { background-color: #e74c3c; box-shadow: 0 0 8px rgba(231,76,60,0.4); }
+    .indicator.green { background-color: #2ecc71; box-shadow: 0 0 8px rgba(46,204,113,0.4); }
+    .leito-btn .leito-num { font-size: 0.75rem; color: #7f8c8d; }
+    .main-area { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+    .panel { background: #f8fafc; border-radius: 10px; padding: 20px; border: 1px solid #e9edf2; }
+    .panel h3 { font-size: 1rem; font-weight: 600; color: #1a3b5d; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .panel textarea { width: 100%; min-height: 200px; border: 1px solid #dce3ec; border-radius: 8px; padding: 12px; font-family: 'Open Sans', sans-serif; font-size: 0.9rem; resize: vertical; }
+    .panel textarea:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,0.1); }
+    .panel .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .btn { background: #ecf0f1; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; color: #2c3e50; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+    .btn-primary { background: #3498db; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #2980b9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(52,152,219,0.25); }
+    .btn-success { background: #2ecc71; color: #fff; }
+    .btn-success:hover:not(:disabled) { background: #27ae60; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(46,204,113,0.25); }
+    .btn-warning { background: #f39c12; color: #fff; }
+    .btn-warning:hover:not(:disabled) { background: #d68910; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(243,156,18,0.25); }
+    .btn-danger { background: #e74c3c; color: #fff; }
+    .btn-danger:hover:not(:disabled) { background: #c0392b; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(231,76,60,0.25); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn .badge { background: rgba(255,255,255,0.3); border-radius: 20px; padding: 0 8px; font-size: 0.7rem; }
+    .output-area { background: #fff; border: 1px solid #e9edf2; border-radius: 10px; padding: 20px; min-height: 200px; white-space: pre-wrap; font-size: 0.9rem; line-height: 1.6; color: #2c3e50; max-height: 600px; overflow-y: auto; font-family: 'Open Sans', sans-serif; }
+    .output-area:empty::before { content: 'Os documentos gerados aparecerão aqui...'; color: #bdc3c7; font-style: italic; }
+    .output-area .doc-type { font-weight: 700; color: #1a3b5d; background: #ecf0f1; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin-bottom: 8px; }
+    .footer-actions { display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid #e9edf2; padding-top: 20px; margin-top: 10px; flex-wrap: wrap; }
+    .status-msg { padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-weight: 600; font-size: 0.9rem; background: #f1f9ff; border-left: 4px solid #3498db; }
+    .status-msg.error { background: #fff5f5; border-left-color: #e74c3c; color: #c0392b; }
+    .status-msg.success { background: #f0fff4; border-left-color: #2ecc71; color: #27ae60; }
+    .current-leito-label { font-weight: 600; color: #1a3b5d; background: #eef2f7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-left: auto; }
+    .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 2px solid #e9edf2; }
+    .tab-btn { background: transparent; border: none; padding: 8px 16px; cursor: pointer; font-weight: 600; color: #7f8c8d; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab-btn.active { color: #1a3b5d; border-bottom-color: #3498db; }
+    .tab-btn:hover { color: #1a3b5d; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    @media (max-width: 1024px) { .grid-section { grid-template-columns: 1fr; } .main-area { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .container { padding: 16px; } .leitos-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); } .leito-btn { font-size: 0.75rem; padding: 8px 4px; } .footer-actions { flex-direction: column; } .current-leito-label { margin-left: 0; width: 100%; text-align: center; margin-top: 8px; } }
+    .output-area::-webkit-scrollbar { width: 6px; }
+    .output-area::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+    .output-area::-webkit-scrollbar-thumb { background: #c1c7cd; border-radius: 10px; }
+    .output-area::-webkit-scrollbar-thumb:hover { background: #a0a7ae; }
   </style>
 </head>
 <body>
-  <div class="container" id="app">
-    <h1>
-      🏥 HandoffMed
-      <small>Passagem de Plantão</small>
-    </h1>
-    <div class="subtitle">
-      Resumo clínico inteligente para passagem de plantão entre médicos.
-      Clique em um leito para inserir a evolução e gerar o resumo.
-    </div>
+  <div class="container">
+    <h1>🏥 HandoffMed <small>Passagem de Plantão & Round Médico</small></h1>
+    <div class="subtitle">Resumo clínico inteligente para passagem de plantão e discussão diária de casos (Round Médico).</div>
 
     <div id="statusMsg" class="status-msg" style="display: none;"></div>
 
     <div class="grid-section">
       <div class="section-card">
-        <div class="section-title">
-          🟥 Sala Vermelha
-          <span class="badge">11 leitos</span>
-        </div>
+        <div class="section-title">🟥 Sala Vermelha <span class="badge">11 leitos</span></div>
         <div class="leitos-grid" id="vermelhaGrid"></div>
       </div>
-
       <div class="section-card">
-        <div class="section-title">
-          🟨 Retaguarda do Trauma
-          <span class="badge">6 leitos</span>
-        </div>
+        <div class="section-title">🟨 Retaguarda do Trauma <span class="badge">6 leitos</span></div>
         <div class="leitos-grid" id="retaguardaGrid"></div>
       </div>
     </div>
 
     <div class="main-area">
       <div class="panel">
-        <h3>
-          📝 Evolução Médica
-          <span id="currentLeitoLabel" class="current-leito-label">Nenhum leito selecionado</span>
-        </h3>
+        <h3>📝 Evolução Médica <span id="currentLeitoLabel" class="current-leito-label">Nenhum leito selecionado</span></h3>
         <textarea id="evolucaoInput" placeholder="Cole aqui a evolução médica do paciente..."></textarea>
-        <div class="actions">
-          <button class="btn btn-primary" id="gerarResumoBtn" disabled>
-            ⚡ Gerar Resumo
-          </button>
-          <button class="btn btn-danger" id="limparInputBtn">
-            🗑️ Limpar
-          </button>
+        
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="plantao">⚡ Plantão (Resumo)</button>
+          <button class="tab-btn" data-tab="round">📋 Round Médico (Completo)</button>
         </div>
-        <div style="margin-top: 12px; font-size: 0.8rem; color: #7f8c8d; display: flex; justify-content: space-between; flex-wrap: wrap;">
-          <span id="wordCount">0</span> palavras
-          <span>Resumo gerado com IA (DeepSeek)</span>
+
+        <div class="tab-content active" id="tab-plantao">
+          <div class="actions">
+            <button class="btn btn-primary" id="gerarPlantaoBtn" disabled>⚡ Gerar Resumo (Plantão)</button>
+            <button class="btn btn-danger" id="limparInputBtn">🗑️ Limpar</button>
+          </div>
+          <div style="margin-top:8px; font-size:0.8rem; color:#7f8c8d;">
+            <span id="wordCount">0</span> palavras · Resumo objetivo para passagem de plantão (50-80 palavras)
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-round">
+          <div class="actions">
+            <button class="btn btn-warning" id="gerarRoundBtn" disabled>📋 Gerar Round Médico</button>
+            <button class="btn btn-danger" id="limparInputRoundBtn">🗑️ Limpar</button>
+          </div>
+          <div style="margin-top:8px; font-size:0.8rem; color:#7f8c8d;">
+            Documento completo para discussão diária · 12 seções estruturadas
+          </div>
         </div>
       </div>
 
       <div class="panel">
-        <h3>
-          📋 Resumos Gerados
-          <span style="font-weight:400; font-size:0.8rem; color:#7f8c8d; margin-left:auto;">
-            <span id="totalResumos">0</span> resumos
-          </span>
-        </h3>
+        <h3>📋 Documentos Gerados <span style="font-weight:400; font-size:0.8rem; color:#7f8c8d; margin-left:auto;"><span id="totalDocs">0</span> documentos</span></h3>
         <div id="outputArea" class="output-area"></div>
         <div class="footer-actions">
-          <button class="btn btn-success" id="baixarTxtBtn">
-            ⬇️ Baixar .txt
-          </button>
-          <button class="btn btn-danger" id="limparTudoBtn">
-            🗑️ Limpar Todos os Dados
-          </button>
+          <button class="btn btn-success" id="baixarTxtBtn">⬇️ Baixar .txt</button>
+          <button class="btn btn-danger" id="limparTudoBtn">🗑️ Limpar Todos</button>
         </div>
       </div>
     </div>
@@ -454,23 +134,44 @@
       const LEITOS_VERMELHA = Array.from({ length: 11 }, (_, i) => `Vermelha ${i+1}`);
       const LEITOS_RETAGUARDA = Array.from({ length: 6 }, (_, i) => `Retaguarda ${i+1}`);
 
-      let state = {
-        leitos: {},
-        selectedLeito: null,
-      };
+      let state = { leitos: {}, selectedLeito: null };
 
       const vermelhaGrid = document.getElementById('vermelhaGrid');
       const retaguardaGrid = document.getElementById('retaguardaGrid');
       const evolucaoInput = document.getElementById('evolucaoInput');
-      const gerarResumoBtn = document.getElementById('gerarResumoBtn');
+      const gerarPlantaoBtn = document.getElementById('gerarPlantaoBtn');
+      const gerarRoundBtn = document.getElementById('gerarRoundBtn');
       const limparInputBtn = document.getElementById('limparInputBtn');
+      const limparInputRoundBtn = document.getElementById('limparInputRoundBtn');
       const outputArea = document.getElementById('outputArea');
       const baixarTxtBtn = document.getElementById('baixarTxtBtn');
       const limparTudoBtn = document.getElementById('limparTudoBtn');
       const statusMsg = document.getElementById('statusMsg');
       const currentLeitoLabel = document.getElementById('currentLeitoLabel');
       const wordCount = document.getElementById('wordCount');
-      const totalResumos = document.getElementById('totalResumos');
+      const totalDocs = document.getElementById('totalDocs');
+
+      // Tabs
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = {
+        plantao: document.getElementById('tab-plantao'),
+        round: document.getElementById('tab-round')
+      };
+
+      let currentTab = 'plantao';
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const tab = this.dataset.tab;
+          tabBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle('active', key === tab);
+          });
+          currentTab = tab;
+          updateButtonStates();
+        });
+      });
 
       function showStatus(message, type = 'info', duration = 4000) {
         statusMsg.textContent = message;
@@ -478,53 +179,60 @@
         statusMsg.style.display = 'block';
         clearTimeout(statusMsg._timeout);
         if (duration > 0) {
-          statusMsg._timeout = setTimeout(() => {
-            statusMsg.style.display = 'none';
-          }, duration);
+          statusMsg._timeout = setTimeout(() => { statusMsg.style.display = 'none'; }, duration);
         }
       }
 
       function updateWordCount() {
         const text = evolucaoInput.value;
-        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-        wordCount.textContent = words;
+        wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
       }
 
-      function updateTotalResumos() {
-        const leitos = Object.values(state.leitos);
-        const count = leitos.filter(l => l.resumo && l.resumo.trim() !== '').length;
-        totalResumos.textContent = count;
+      function updateTotalDocs() {
+        const count = Object.values(state.leitos).filter(l => l.plantao?.trim() || l.round?.trim()).length;
+        totalDocs.textContent = count;
       }
 
       function updateOutputArea() {
-        const leitos = Object.values(state.leitos);
-        const entries = leitos.filter(l => l.resumo && l.resumo.trim() !== '');
-        if (entries.length === 0) {
-          outputArea.innerHTML = '';
-          return;
-        }
+        const entries = Object.values(state.leitos).filter(l => l.plantao?.trim() || l.round?.trim());
+        if (entries.length === 0) { outputArea.innerHTML = ''; return; }
         entries.sort((a, b) => a.nome.localeCompare(b.nome));
-        const now = new Date();
-        const dateStr = now.toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
-        let html = `<div style="font-weight:600; color:#1a3b5d; border-bottom:2px solid #e9edf2; padding-bottom:8px; margin-bottom:12px;">
-          📅 Plantão: ${dateStr}
-        </div>`;
+        const dateStr = new Date().toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
+        let html = `<div style="font-weight:600; color:#1a3b5d; border-bottom:2px solid #e9edf2; padding-bottom:8px; margin-bottom:12px;">📅 Documentos: ${dateStr}</div>`;
         entries.forEach(entry => {
-          html += `<div style="margin-bottom:16px; background:#f8fafc; border-radius:6px; padding:12px; border-left:4px solid #3498db;">
-            <div style="font-weight:700; color:#1a3b5d; font-size:0.9rem;">${entry.nome}</div>
-            <div style="font-size:0.9rem; line-height:1.6; margin-top:4px;">${entry.resumo}</div>
-          </div>`;
+          const hasPlantao = entry.plantao?.trim();
+          const hasRound = entry.round?.trim();
+          
+          html += `<div style="margin-bottom:20px; background:#f8fafc; border-radius:6px; padding:12px; border-left:4px solid ${hasRound ? '#f39c12' : '#3498db'};">
+            <div style="font-weight:700; color:#1a3b5d; font-size:0.9rem; display:flex; justify-content:space-between; flex-wrap:wrap;">
+              <span>${entry.nome}</span>
+              <span style="font-weight:400; font-size:0.75rem; color:#7f8c8d;">
+                ${hasRound ? '📋 Round' : ''} ${hasPlantao && hasRound ? '|' : ''} ${hasPlantao ? '⚡ Plantão' : ''}
+              </span>
+            </div>`;
+          
+          if (hasPlantao) {
+            html += `<div style="margin-top:8px; font-size:0.85rem; line-height:1.5; background:#e8f4fd; padding:8px 12px; border-radius:4px; border-left:3px solid #3498db;">
+              <span style="font-weight:600; font-size:0.7rem; color:#2980b9;">⚡ PLANTÃO:</span>
+              <div style="margin-top:4px;">${entry.plantao}</div>
+            </div>`;
+          }
+          
+          if (hasRound) {
+            html += `<div style="margin-top:8px; font-size:0.85rem; line-height:1.5; background:#fef9e7; padding:8px 12px; border-radius:4px; border-left:3px solid #f39c12;">
+              <span style="font-weight:600; font-size:0.7rem; color:#d68910;">📋 ROUND MÉDICO:</span>
+              <div style="margin-top:4px;">${entry.round}</div>
+            </div>`;
+          }
+          
+          html += `</div>`;
         });
         outputArea.innerHTML = html;
-        updateTotalResumos();
+        updateTotalDocs();
       }
 
       function saveState() {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch (e) {
-          console.warn('Não foi possível salvar no localStorage:', e);
-        }
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { console.warn(e); }
       }
 
       function loadState() {
@@ -534,23 +242,18 @@
             const parsed = JSON.parse(saved);
             state.leitos = parsed.leitos || {};
             [...LEITOS_VERMELHA, ...LEITOS_RETAGUARDA].forEach(nome => {
-              if (!state.leitos[nome]) {
-                state.leitos[nome] = { nome, evoluicao: '', resumo: '' };
-              }
+              if (!state.leitos[nome]) state.leitos[nome] = { nome, evoluicao: '', plantao: '', round: '' };
             });
             return true;
           }
-        } catch (e) {
-          console.warn('Erro ao carregar estado:', e);
-        }
+        } catch (e) { console.warn(e); }
         return false;
       }
 
       function initState() {
-        const loaded = loadState();
-        if (!loaded) {
+        if (!loadState()) {
           [...LEITOS_VERMELHA, ...LEITOS_RETAGUARDA].forEach(nome => {
-            state.leitos[nome] = { nome, evoluicao: '', resumo: '' };
+            state.leitos[nome] = { nome, evoluicao: '', plantao: '', round: '' };
           });
           saveState();
         }
@@ -566,24 +269,19 @@
       function renderGrid(grid, nomes) {
         grid.innerHTML = '';
         nomes.forEach(nome => {
-          const data = state.leitos[nome] || { evoluicao: '', resumo: '' };
-          const hasResumo = data.resumo && data.resumo.trim() !== '';
-          const hasData = data.evoluicao && data.evoluicao.trim() !== '';
+          const data = state.leitos[nome] || { evoluicao: '', plantao: '', round: '' };
+          const hasDoc = data.plantao?.trim() || data.round?.trim();
+          const hasData = data.evoluicao?.trim();
           const btn = document.createElement('button');
           btn.className = 'leito-btn';
           btn.dataset.nome = nome;
           btn.innerHTML = `
-            <span class="indicator ${hasResumo ? 'green' : 'red'}"></span>
+            <span class="indicator ${hasDoc ? 'green' : 'red'}"></span>
             <span>${nome}</span>
             <span class="leito-num">${hasData ? '📄' : '⚪'}</span>
           `;
-          if (hasResumo) {
-            btn.title = 'Resumo gerado. Clique para ver/editar.';
-          } else if (hasData) {
-            btn.title = 'Evolução inserida, mas resumo não gerado.';
-          } else {
-            btn.title = 'Sem dados. Clique para inserir evolução.';
-          }
+          btn.title = hasDoc ? 'Documento gerado. Clique para ver/editar.' : 
+                      hasData ? 'Evolução inserida, documento pendente.' : 'Sem dados. Clique para inserir.';
           btn.addEventListener('click', () => selectLeito(nome));
           grid.appendChild(btn);
         });
@@ -592,28 +290,30 @@
       function selectLeito(nome) {
         state.selectedLeito = nome;
         const data = state.leitos[nome];
-        if (data) {
-          evolucaoInput.value = data.evoluicao || '';
-        } else {
-          evolucaoInput.value = '';
-        }
+        evolucaoInput.value = data?.evoluicao || '';
         currentLeitoLabel.textContent = nome;
-        gerarResumoBtn.disabled = !(evolucaoInput.value && evolucaoInput.value.trim() !== '');
+        updateButtonStates();
         updateWordCount();
         document.querySelectorAll('.leito-btn').forEach(b => b.style.borderColor = '#dce3ec');
         document.querySelectorAll(`.leito-btn[data-nome="${nome}"]`).forEach(b => b.style.borderColor = '#3498db');
         evolucaoInput.focus();
       }
 
+      function updateButtonStates() {
+        const hasContent = evolucaoInput.value?.trim() !== '';
+        gerarPlantaoBtn.disabled = !hasContent;
+        gerarRoundBtn.disabled = !hasContent;
+      }
+
       function updateAll() {
         renderLeitos();
         updateOutputArea();
-        updateTotalResumos();
+        updateTotalDocs();
         if (state.selectedLeito) {
           const data = state.leitos[state.selectedLeito];
           if (data) {
             evolucaoInput.value = data.evoluicao || '';
-            gerarResumoBtn.disabled = !(data.evoluicao && data.evoluicao.trim() !== '');
+            updateButtonStates();
             updateWordCount();
           }
         }
@@ -622,16 +322,7 @@
           const data = state.leitos[nome];
           if (data) {
             const indicator = btn.querySelector('.indicator');
-            if (data.resumo && data.resumo.trim() !== '') {
-              indicator.className = 'indicator green';
-              btn.title = 'Resumo gerado. Clique para ver/editar.';
-            } else if (data.evoluicao && data.evoluicao.trim() !== '') {
-              indicator.className = 'indicator red';
-              btn.title = 'Evolução inserida, mas resumo não gerado.';
-            } else {
-              indicator.className = 'indicator red';
-              btn.title = 'Sem dados. Clique para inserir evolução.';
-            }
+            indicator.className = `indicator ${(data.plantao?.trim() || data.round?.trim()) ? 'green' : 'red'}`;
           }
         });
       }
@@ -639,114 +330,143 @@
       evolucaoInput.addEventListener('input', function() {
         const text = this.value;
         updateWordCount();
-        const hasContent = text && text.trim() !== '';
-        gerarResumoBtn.disabled = !hasContent;
+        updateButtonStates();
         if (state.selectedLeito) {
           state.leitos[state.selectedLeito].evoluicao = text;
           saveState();
-          const data = state.leitos[state.selectedLeito];
-          const btn = document.querySelector(`.leito-btn[data-nome="${state.selectedLeito}"]`);
-          if (btn) {
-            const indicator = btn.querySelector('.indicator');
-            if (data.resumo && data.resumo.trim() !== '') {
-              indicator.className = 'indicator green';
-            } else if (data.evoluicao && data.evoluicao.trim() !== '') {
-              indicator.className = 'indicator red';
-            } else {
-              indicator.className = 'indicator red';
-            }
-          }
           renderLeitos();
         }
       });
 
-      gerarResumoBtn.addEventListener('click', async function() {
+      async function gerarDocumento(tipo) {
         const leitoNome = state.selectedLeito;
-        if (!leitoNome) {
-          showStatus('Selecione um leito primeiro.', 'error');
-          return;
-        }
+        if (!leitoNome) { showStatus('Selecione um leito primeiro.', 'error'); return; }
+        
         const evoluicao = evolucaoInput.value;
-        if (!evoluicao || evoluicao.trim() === '') {
-          showStatus('A evolução médica está vazia.', 'error');
-          return;
+        if (!evoluicao?.trim()) { showStatus('A evolução médica está vazia.', 'error'); return; }
+
+        let prompt, tipoLabel, btn, docField;
+
+        if (tipo === 'plantao') {
+          prompt = `Você é um médico especialista em emergência e terapia intensiva. Leia a evolução médica abaixo e gere um RESUMO CLÍNICO para PASSAGEM DE PLANTÃO.
+
+REGRAS:
+- Resumo com 50-80 palavras (máximo)
+- Use abreviações: HAS, DM, IAM, AVC, ICC, DPOC, IRC, TCE, TVP, TEP, HDA, DRC, DAOP
+- Converta nomes para iniciais (ex: João da Silva = JS)
+- Doenças sensíveis (HIV, AIDS, câncer, aborto, suicídio) → use CID-10
+- Estrutura: Idade/Sexo | Comorbidades | Motivo | Conduta | Estado atual | Pendências
+- Se houver critérios de alta, mencione "preenche critérios de alta" ou "não preenche"
+
+EVOLUÇÃO:
+${evoluicao}
+
+RESUMO PARA PASSAGEM DE PLANTÃO:`;
+          tipoLabel = 'Plantão';
+          btn = gerarPlantaoBtn;
+          docField = 'plantao';
+        } else {
+          prompt = `Você é um médico especialista em emergência e terapia intensiva. Leia a evolução médica abaixo e gere um RELATÓRIO COMPLETO para ROUND MÉDICO.
+
+ESTRUTURA OBRIGATÓRIA:
+
+1. IDENTIFICAÇÃO: Nome (iniciais), idade, sexo, procedência. Data/hora atual.
+
+2. MOTIVO DA INTERNAÇÃO: Sintoma principal ou diagnóstico inicial. Data de admissão.
+
+3. SITUAÇÃO CIRÚRGICA: Especificar se está em pós-operatório (PO) e de qual procedimento, com tempo decorrido. Se não houver: "Não há relato de procedimento cirúrgico."
+
+4. COMORBIDADES: HAS, DM, DRC, HIV, etc. Medicações de uso contínuo prévio.
+
+5. SITUAÇÃO CLÍNICA ATUAL:
+   - Sinais vitais: PA, FC, FR, Temp, SatO₂
+   - Sedação e drogas em infusão contínua (se houver)
+   - Invasões: TOT/TQT, CVC, SVD, drenos
+   - Ventilação mecânica: modo, parâmetros, FiO₂, PEEP
+   - Estado neurológico: Glasgow, pupilas, força
+   - Exame físico: achados relevantes
+
+6. GASOMETRIA ARTERIAL (se disponível): Data, horário, valores principais.
+
+7. EXAMES DE IMAGEM: TC, RM, USG, RX com data e achados relevantes.
+
+8. EXAMES LABORATORIAIS: Hemograma, eletrólitos, função renal, hepática, marcadores.
+
+9. ANTIBIÓTICOS EM USO (se houver): Nome, dose, horário, tempo de uso.
+
+10. IMPRESSÃO DO CASO (SUMÁRIO): Resumir em 2-3 frases o quadro clínico, evolução e problemas atuais.
+
+11. CONDUTAS E ROTINA: Decisões do round. Se não houver: "Discutir com a Rotina as condutas e registrar adequadamente no prontuário."
+
+12. IMPRESSÃO FINAL: Resumo elaborado do caso, com pendências e prognóstico.
+
+EVOLUÇÃO MÉDICA:
+${evoluicao}
+
+RELATÓRIO PARA ROUND MÉDICO:`;
+          tipoLabel = 'Round Médico';
+          btn = gerarRoundBtn;
+          docField = 'round';
         }
-
-        const prompt = `Você é um especialista em emergências médicas e terapia intensiva. Sua tarefa é ler a evolução médica fornecida e elaborar um resumo clínico conciso e objetivo para passagem de plantão entre médicos.
-
-        Regras:
-        - O resumo deve ter entre 50 e 80 palavras.
-        - Seja formal, use abreviações médicas padrão (HAS, DM, IAM, AVC, etc.).
-        - Converta nomes para iniciais (ex: João da Silva -> JS).
-        - Converta doenças sensíveis (HIV, AIDS, câncer, tentativa de autoextermínio, etc.) para CID-10.
-        - Não inclua informações que identifiquem o paciente.
-        - Inclua: idade, sexo, principais comorbidades, motivo da internação, conduta inicial, estado atual, pendências e critérios de alta (se aplicável).
-        - Se houver critérios de alta, mencione explicitamente "preenche critérios de alta para enfermaria" ou "não preenche critérios de alta".
-        - O resumo deve ser um texto fluido, pronto para ser lido em voz alta em 30-40 segundos.
-
-        Evolução médica fornecida:
-        ${evoluicao}
-
-        Resumo para passagem de plantão:`;
 
         try {
-          gerarResumoBtn.disabled = true;
-          gerarResumoBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-          showStatus('🔄 Gerando resumo com IA...', 'info', 0);
-
-          console.log('Enviando requisição para o Worker...');
-          console.log('Tamanho do prompt:', prompt.length);
+          btn.disabled = true;
+          btn.innerHTML = `<span class="loading-spinner"></span> Gerando ${tipoLabel}...`;
+          showStatus(`🔄 Gerando ${tipoLabel}...`, 'info', 0);
 
           const response = await fetch(WORKER_URL, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: prompt }),
           });
 
-          console.log('Status da resposta:', response.status);
-
-          // Tenta ler a resposta como texto primeiro
           const responseText = await response.text();
-          console.log('Resposta bruta:', responseText.substring(0, 200));
-
-          // Tenta parsear como JSON
-          let data;
-          try {
-            data = JSON.parse(responseText);
-          } catch (parseError) {
-            console.error('Erro ao parsear resposta:', parseError);
-            throw new Error(`Resposta inválida do servidor: ${responseText.substring(0, 100)}`);
-          }
-
+          
           if (!response.ok) {
-            throw new Error(data.error || `Erro HTTP ${response.status}`);
+            let errorMsg = `Erro ${response.status}`;
+            try { const data = JSON.parse(responseText); errorMsg = data.error || errorMsg; } catch (e) {}
+            throw new Error(errorMsg);
           }
 
-          const resumo = data.message || 'Erro: Nenhum resumo gerado.';
+          const data = JSON.parse(responseText);
+          const documento = data.message || 'Erro: Nenhum documento gerado.';
 
-          state.leitos[leitoNome].resumo = resumo;
+          state.leitos[leitoNome][docField] = documento;
           state.leitos[leitoNome].evoluicao = evoluicao;
           saveState();
           updateAll();
 
-          showStatus(`✅ Resumo gerado para ${leitoNome}!`, 'success', 3000);
+          showStatus(`✅ ${tipoLabel} gerado para ${leitoNome}!`, 'success', 3000);
           outputArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
         } catch (error) {
-          console.error('Erro ao gerar resumo:', error);
+          console.error('Erro:', error);
           showStatus(`❌ Erro: ${error.message}`, 'error', 5000);
         } finally {
-          gerarResumoBtn.disabled = false;
-          gerarResumoBtn.innerHTML = '⚡ Gerar Resumo';
+          btn.disabled = false;
+          btn.innerHTML = tipo === 'plantao' ? '⚡ Gerar Resumo (Plantão)' : '📋 Gerar Round Médico';
         }
-      });
+      }
+
+      gerarPlantaoBtn.addEventListener('click', () => gerarDocumento('plantao'));
+      gerarRoundBtn.addEventListener('click', () => gerarDocumento('round'));
 
       limparInputBtn.addEventListener('click', function() {
         evolucaoInput.value = '';
         updateWordCount();
-        gerarResumoBtn.disabled = true;
+        updateButtonStates();
+        if (state.selectedLeito) {
+          state.leitos[state.selectedLeito].evoluicao = '';
+          saveState();
+          updateAll();
+          showStatus('Evolução limpa.', 'info', 1500);
+        }
+      });
+
+      limparInputRoundBtn.addEventListener('click', function() {
+        evolucaoInput.value = '';
+        updateWordCount();
+        updateButtonStates();
         if (state.selectedLeito) {
           state.leitos[state.selectedLeito].evoluicao = '';
           saveState();
@@ -756,67 +476,60 @@
       });
 
       baixarTxtBtn.addEventListener('click', function() {
-        const leitos = Object.values(state.leitos);
-        const entries = leitos.filter(l => l.resumo && l.resumo.trim() !== '');
-        if (entries.length === 0) {
-          showStatus('Nenhum resumo para exportar.', 'error', 3000);
-          return;
-        }
+        const entries = Object.values(state.leitos).filter(l => l.plantao?.trim() || l.round?.trim());
+        if (entries.length === 0) { showStatus('Nenhum documento para exportar.', 'error', 3000); return; }
         entries.sort((a, b) => a.nome.localeCompare(b.nome));
         const now = new Date();
         const dateStr = now.toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
-        let content = `=== PASSAGEM DE PLANTÃO - HandoffMed ===\n`;
-        content += `Data/Hora: ${dateStr}\n`;
-        content += `Total de resumos: ${entries.length}\n\n`;
-        entries.forEach(entry => {
-          content += `--- ${entry.nome} ---\n`;
-          content += `${entry.resumo}\n\n`;
+        let content = `=== HandoffMed - Documentos Clínicos ===\n`;
+        content += `Data/Hora: ${dateStr}\nTotal: ${entries.length}\n\n`;
+        entries.forEach(e => {
+          content += `--- ${e.nome} ---\n`;
+          if (e.plantao?.trim()) {
+            content += `[PLANTÃO]\n${e.plantao}\n\n`;
+          }
+          if (e.round?.trim()) {
+            content += `[ROUND MÉDICO]\n${e.round}\n\n`;
+          }
+          content += `----------------------------------------\n\n`;
         });
-        content += `========================================\n`;
         content += `Gerado por HandoffMed em ${dateStr}`;
 
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `passagem_plantao_${now.toISOString().slice(0,10)}.txt`;
+        a.download = `handoffmed_${now.toISOString().slice(0,10)}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showStatus('✅ Arquivo baixado com sucesso!', 'success', 3000);
+        showStatus('✅ Arquivo baixado!', 'success', 3000);
       });
 
       limparTudoBtn.addEventListener('click', function() {
-        if (confirm('⚠️ Tem certeza que deseja apagar todos os dados e resumos gerados?')) {
+        if (confirm('⚠️ Apagar todos os dados?')) {
           [...LEITOS_VERMELHA, ...LEITOS_RETAGUARDA].forEach(nome => {
-            state.leitos[nome] = { nome, evoluicao: '', resumo: '' };
+            state.leitos[nome] = { nome, evoluicao: '', plantao: '', round: '' };
           });
           state.selectedLeito = null;
           evolucaoInput.value = '';
           currentLeitoLabel.textContent = 'Nenhum leito selecionado';
-          gerarResumoBtn.disabled = true;
+          updateButtonStates();
           saveState();
           updateAll();
           showStatus('Todos os dados foram apagados.', 'info', 3000);
         }
       });
 
+      // Inicialização
       initState();
-
-      if (!state.selectedLeito) {
-        const primeiroLeito = LEITOS_VERMELHA[0];
-        if (primeiroLeito) {
-          selectLeito(primeiroLeito);
-        }
-      } else {
-        selectLeito(state.selectedLeito);
-      }
-
+      if (!state.selectedLeito) selectLeito(LEITOS_VERMELHA[0]);
+      else selectLeito(state.selectedLeito);
       updateWordCount();
-      gerarResumoBtn.disabled = !(evolucaoInput.value && evolucaoInput.value.trim() !== '');
+      updateButtonStates();
 
-      console.log('🏥 HandoffMed inicializado!');
+      console.log('🏥 HandoffMed v2.0 - Plantão + Round Médico');
       console.log('🌐 Worker URL:', WORKER_URL);
     })();
   </script>
