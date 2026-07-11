@@ -166,6 +166,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .panel textarea {
@@ -214,7 +215,7 @@
       color: #fff;
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background: #2980b9;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
@@ -276,6 +277,7 @@
       border-top: 1px solid #e9edf2;
       padding-top: 20px;
       margin-top: 10px;
+      flex-wrap: wrap;
     }
 
     .status-msg {
@@ -307,6 +309,21 @@
       padding: 4px 12px;
       border-radius: 20px;
       font-size: 0.8rem;
+      margin-left: auto;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     @media (max-width: 1024px) {
@@ -332,9 +349,14 @@
       .footer-actions {
         flex-direction: column;
       }
+      .current-leito-label {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+        margin-top: 8px;
+      }
     }
 
-    /* Scroll personalizado */
     .output-area::-webkit-scrollbar {
       width: 6px;
     }
@@ -362,37 +384,27 @@
       Clique em um leito para inserir a evolução e gerar o resumo.
     </div>
 
-    <!-- Status Message -->
     <div id="statusMsg" class="status-msg" style="display: none;"></div>
 
-    <!-- Leitos -->
     <div class="grid-section">
-      <!-- Sala Vermelha -->
       <div class="section-card">
         <div class="section-title">
           🟥 Sala Vermelha
           <span class="badge">11 leitos</span>
         </div>
-        <div class="leitos-grid" id="vermelhaGrid">
-          <!-- Gerado por JS -->
-        </div>
+        <div class="leitos-grid" id="vermelhaGrid"></div>
       </div>
 
-      <!-- Retaguarda -->
       <div class="section-card">
         <div class="section-title">
           🟨 Retaguarda do Trauma
           <span class="badge">6 leitos</span>
         </div>
-        <div class="leitos-grid" id="retaguardaGrid">
-          <!-- Gerado por JS -->
-        </div>
+        <div class="leitos-grid" id="retaguardaGrid"></div>
       </div>
     </div>
 
-    <!-- Área de Edição e Resultado -->
     <div class="main-area">
-      <!-- Painel de Entrada -->
       <div class="panel">
         <h3>
           📝 Evolução Médica
@@ -407,12 +419,12 @@
             🗑️ Limpar
           </button>
         </div>
-        <div style="margin-top: 12px; font-size: 0.8rem; color: #7f8c8d;">
-          <span id="wordCount">0</span> palavras · Resumo será gerado com IA (DeepSeek)
+        <div style="margin-top: 12px; font-size: 0.8rem; color: #7f8c8d; display: flex; justify-content: space-between; flex-wrap: wrap;">
+          <span id="wordCount">0</span> palavras
+          <span>Resumo gerado com IA (DeepSeek)</span>
         </div>
       </div>
 
-      <!-- Painel de Saída -->
       <div class="panel">
         <h3>
           📋 Resumos Gerados
@@ -437,19 +449,16 @@
     (function() {
       'use strict';
 
-      // --- CONFIG ---
       const WORKER_URL = 'https://nvidia-proxy.chapermann.workers.dev/';
       const STORAGE_KEY = 'handoffmed_data';
       const LEITOS_VERMELHA = Array.from({ length: 11 }, (_, i) => `Vermelha ${i+1}`);
       const LEITOS_RETAGUARDA = Array.from({ length: 6 }, (_, i) => `Retaguarda ${i+1}`);
 
-      // --- STATE ---
       let state = {
-        leitos: {}, // { 'Vermelha 1': { evoluicao: '...', resumo: '...' }, ... }
+        leitos: {},
         selectedLeito: null,
       };
 
-      // --- DOM REFS ---
       const vermelhaGrid = document.getElementById('vermelhaGrid');
       const retaguardaGrid = document.getElementById('retaguardaGrid');
       const evolucaoInput = document.getElementById('evolucaoInput');
@@ -463,15 +472,16 @@
       const wordCount = document.getElementById('wordCount');
       const totalResumos = document.getElementById('totalResumos');
 
-      // --- HELPERS ---
       function showStatus(message, type = 'info', duration = 4000) {
         statusMsg.textContent = message;
         statusMsg.className = `status-msg ${type}`;
         statusMsg.style.display = 'block';
         clearTimeout(statusMsg._timeout);
-        statusMsg._timeout = setTimeout(() => {
-          statusMsg.style.display = 'none';
-        }, duration);
+        if (duration > 0) {
+          statusMsg._timeout = setTimeout(() => {
+            statusMsg.style.display = 'none';
+          }, duration);
+        }
       }
 
       function updateWordCount() {
@@ -493,7 +503,6 @@
           outputArea.innerHTML = '';
           return;
         }
-        // Ordenar por nome do leito para consistência
         entries.sort((a, b) => a.nome.localeCompare(b.nome));
         const now = new Date();
         const dateStr = now.toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
@@ -524,7 +533,6 @@
           if (saved) {
             const parsed = JSON.parse(saved);
             state.leitos = parsed.leitos || {};
-            // Garantir que todos os leitos existam no estado
             [...LEITOS_VERMELHA, ...LEITOS_RETAGUARDA].forEach(nome => {
               if (!state.leitos[nome]) {
                 state.leitos[nome] = { nome, evoluicao: '', resumo: '' };
@@ -541,7 +549,6 @@
       function initState() {
         const loaded = loadState();
         if (!loaded) {
-          // Inicializar todos os leitos
           [...LEITOS_VERMELHA, ...LEITOS_RETAGUARDA].forEach(nome => {
             state.leitos[nome] = { nome, evoluicao: '', resumo: '' };
           });
@@ -560,8 +567,8 @@
         grid.innerHTML = '';
         nomes.forEach(nome => {
           const data = state.leitos[nome] || { evoluicao: '', resumo: '' };
-          const hasData = data.evolucao && data.evolucao.trim() !== '';
           const hasResumo = data.resumo && data.resumo.trim() !== '';
+          const hasData = data.evoluicao && data.evoluicao.trim() !== '';
           const btn = document.createElement('button');
           btn.className = 'leito-btn';
           btn.dataset.nome = nome;
@@ -593,10 +600,8 @@
         currentLeitoLabel.textContent = nome;
         gerarResumoBtn.disabled = !(evolucaoInput.value && evolucaoInput.value.trim() !== '');
         updateWordCount();
-        // Destacar visualmente o leito selecionado
         document.querySelectorAll('.leito-btn').forEach(b => b.style.borderColor = '#dce3ec');
         document.querySelectorAll(`.leito-btn[data-nome="${nome}"]`).forEach(b => b.style.borderColor = '#3498db');
-        // Foco no textarea
         evolucaoInput.focus();
       }
 
@@ -611,13 +616,7 @@
             gerarResumoBtn.disabled = !(data.evoluicao && data.evoluicao.trim() !== '');
             updateWordCount();
           }
-        } else {
-          // Se não houver seleção, limpar a entrada
-          if (!evolucaoInput.value) {
-            // não faz nada
-          }
         }
-        // Atualizar indicadores nos botões
         document.querySelectorAll('.leito-btn').forEach(btn => {
           const nome = btn.dataset.nome;
           const data = state.leitos[nome];
@@ -637,19 +636,14 @@
         });
       }
 
-      // --- EVENT HANDLERS ---
-
-      // Quando o texto da evolução muda
       evolucaoInput.addEventListener('input', function() {
         const text = this.value;
         updateWordCount();
         const hasContent = text && text.trim() !== '';
         gerarResumoBtn.disabled = !hasContent;
         if (state.selectedLeito) {
-          // Salvar evolução no estado
           state.leitos[state.selectedLeito].evoluicao = text;
           saveState();
-          // Atualizar indicador do leito
           const data = state.leitos[state.selectedLeito];
           const btn = document.querySelector(`.leito-btn[data-nome="${state.selectedLeito}"]`);
           if (btn) {
@@ -662,11 +656,10 @@
               indicator.className = 'indicator red';
             }
           }
-          renderLeitos(); // Re-render para atualizar os ícones
+          renderLeitos();
         }
       });
 
-      // Gerar resumo
       gerarResumoBtn.addEventListener('click', async function() {
         const leitoNome = state.selectedLeito;
         if (!leitoNome) {
@@ -679,10 +672,7 @@
           return;
         }
 
-        // Construir o prompt para a IA
-        const prompt = `
-        Você é um especialista em emergências médicas e terapia intensiva. 
-        Sua tarefa é ler a evolução médica fornecida e elaborar um resumo clínico conciso e objetivo para passagem de plantão entre médicos.
+        const prompt = `Você é um especialista em emergências médicas e terapia intensiva. Sua tarefa é ler a evolução médica fornecida e elaborar um resumo clínico conciso e objetivo para passagem de plantão entre médicos.
 
         Regras:
         - O resumo deve ter entre 50 e 80 palavras.
@@ -697,13 +687,15 @@
         Evolução médica fornecida:
         ${evoluicao}
 
-        Resumo para passagem de plantão:
-        `;
+        Resumo para passagem de plantão:`;
 
         try {
           gerarResumoBtn.disabled = true;
-          gerarResumoBtn.textContent = '⏳ Gerando...';
-          showStatus('Gerando resumo com IA...', 'info', 0);
+          gerarResumoBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+          showStatus('🔄 Gerando resumo com IA...', 'info', 0);
+
+          console.log('Enviando requisição para o Worker...');
+          console.log('Tamanho do prompt:', prompt.length);
 
           const response = await fetch(WORKER_URL, {
             method: 'POST',
@@ -713,23 +705,33 @@
             body: JSON.stringify({ message: prompt }),
           });
 
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Erro na API: ${response.status} - ${errorText}`);
+          console.log('Status da resposta:', response.status);
+
+          // Tenta ler a resposta como texto primeiro
+          const responseText = await response.text();
+          console.log('Resposta bruta:', responseText.substring(0, 200));
+
+          // Tenta parsear como JSON
+          let data;
+          try {
+            data = JSON.parse(responseText);
+          } catch (parseError) {
+            console.error('Erro ao parsear resposta:', parseError);
+            throw new Error(`Resposta inválida do servidor: ${responseText.substring(0, 100)}`);
           }
 
-          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || `Erro HTTP ${response.status}`);
+          }
+
           const resumo = data.message || 'Erro: Nenhum resumo gerado.';
 
-          // Salvar resumo no estado
           state.leitos[leitoNome].resumo = resumo;
-          state.leitos[leitoNome].evoluicao = evoluicao; // garantir que a evolução está salva
+          state.leitos[leitoNome].evoluicao = evoluicao;
           saveState();
           updateAll();
 
-          // Mostrar sucesso
           showStatus(`✅ Resumo gerado para ${leitoNome}!`, 'success', 3000);
-          // Rolar para a área de saída
           outputArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
         } catch (error) {
@@ -737,25 +739,22 @@
           showStatus(`❌ Erro: ${error.message}`, 'error', 5000);
         } finally {
           gerarResumoBtn.disabled = false;
-          gerarResumoBtn.textContent = '⚡ Gerar Resumo';
+          gerarResumoBtn.innerHTML = '⚡ Gerar Resumo';
         }
       });
 
-      // Limpar input
       limparInputBtn.addEventListener('click', function() {
         evolucaoInput.value = '';
         updateWordCount();
         gerarResumoBtn.disabled = true;
         if (state.selectedLeito) {
           state.leitos[state.selectedLeito].evoluicao = '';
-          // Não apagar o resumo, apenas a evolução
           saveState();
           updateAll();
           showStatus('Evolução limpa.', 'info', 1500);
         }
       });
 
-      // Baixar TXT
       baixarTxtBtn.addEventListener('click', function() {
         const leitos = Object.values(state.leitos);
         const entries = leitos.filter(l => l.resumo && l.resumo.trim() !== '');
@@ -788,10 +787,8 @@
         showStatus('✅ Arquivo baixado com sucesso!', 'success', 3000);
       });
 
-      // Limpar todos os dados
       limparTudoBtn.addEventListener('click', function() {
-        if (confirm('Tem certeza que deseja apagar todos os dados e resumos gerados?')) {
-          // Resetar estado
+        if (confirm('⚠️ Tem certeza que deseja apagar todos os dados e resumos gerados?')) {
           [...LEITOS_VERMELHA, ...LEITOS_RETAGUARDA].forEach(nome => {
             state.leitos[nome] = { nome, evoluicao: '', resumo: '' };
           });
@@ -805,32 +802,22 @@
         }
       });
 
-      // --- INICIALIZAÇÃO ---
       initState();
 
-      // Selecionar o primeiro leito por padrão
       if (!state.selectedLeito) {
         const primeiroLeito = LEITOS_VERMELHA[0];
         if (primeiroLeito) {
           selectLeito(primeiroLeito);
         }
       } else {
-        // Re-selecionar para atualizar a UI
         selectLeito(state.selectedLeito);
       }
 
-      // Atualizar word count na inicialização
       updateWordCount();
+      gerarResumoBtn.disabled = !(evolucaoInput.value && evolucaoInput.value.trim() !== '');
 
-      // Garantir que o botão de gerar esteja no estado correto
-      setTimeout(() => {
-        gerarResumoBtn.disabled = !(evolucaoInput.value && evolucaoInput.value.trim() !== '');
-      }, 100);
-
-      // Atualização periódica (para sincronizar com outras abas, se necessário)
-      // Pode ser adicionado um listener para 'storage' se desejar.
-
-      console.log('🏥 HandoffMed inicializado com sucesso!');
+      console.log('🏥 HandoffMed inicializado!');
+      console.log('🌐 Worker URL:', WORKER_URL);
     })();
   </script>
 </body>
